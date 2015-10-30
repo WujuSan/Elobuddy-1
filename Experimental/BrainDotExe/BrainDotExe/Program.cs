@@ -47,7 +47,7 @@ namespace BrainDotExe
             get { return ObjectManager.Player; }
         }
 
-        public static String G_version = "1.4.0";
+        public static String G_version = "1.5.0";
         public static String G_charname = _Player.ChampionName;
 
         /*

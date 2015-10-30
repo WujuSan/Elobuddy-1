@@ -15,7 +15,9 @@ namespace BrainDotExe.Draw
     {
         public static Menu JungleTimersMenu;
 
-        public static List<Tuple<float, Camp>> times = new List<Tuple<float, Camp>>();
+        public static List<Tuple<float, Camp>> Times = new List<Tuple<float, Camp>>();
+
+        public static List<Tuple<float, Vector3>> TimesHealth = new List<Tuple<float, Vector3>>();
 
         public static void Init()
         {
@@ -23,6 +25,7 @@ namespace BrainDotExe.Draw
             JungleTimersMenu = Program.Menu.AddSubMenu("Jungle Timers", "jungleTimersDraw");
             JungleTimersMenu.AddGroupLabel("Jungle Timers");
             JungleTimersMenu.Add("drawTimers", new CheckBox("Show Times", true));
+            JungleTimersMenu.Add("drawTimersHealth", new CheckBox("Show Times of health Howling Abyss", true));
 
             GameObject.OnCreate += GameObjectOnCreate;
             GameObject.OnDelete += GameObjectOnDelete;
@@ -38,15 +41,21 @@ namespace BrainDotExe.Draw
             if (Misc.isChecked(JungleTimersMenu, "drawTimers"))
             {
                 var auxtimes = new List<Tuple<float, Camp>>();
-                foreach (var timer in times)
+                foreach (var timer in Times)
                 {
                     var diffTime = timer.Item1 - Game.Time;
 
                     if (diffTime > 0)
                     {
-                        var seconds = diffTime % 60;
-                        var minutes = diffTime / 60;
-                        var spellString = minutes <= 0 ? Math.Round(seconds) + "" : Math.Round(minutes) + ":" + Math.Round(seconds);
+                        var seconds = Math.Floor(diffTime % 60);
+                        var minutes = Math.Floor(diffTime / 60);
+
+                        if (diffTime < 60)
+                        {
+                            minutes = 0;
+                        }
+
+                        var spellString = minutes <= 0 ? seconds + "" : minutes + ":" + seconds;
 
                         Drawing.DrawText(Drawing.WorldToMinimap(timer.Item2.Position).X - 5, Drawing.WorldToMinimap(timer.Item2.Position).Y - 5,
                             Color.White, // infos da cor
@@ -60,7 +69,42 @@ namespace BrainDotExe.Draw
 
                 if (auxtimes.Count > 0)
                 {
-                    times = times.Except(auxtimes).ToList();
+                    Times = Times.Except(auxtimes).ToList();
+                }
+            }
+
+            if (Misc.isChecked(JungleTimersMenu, "drawTimersHealth"))
+            {
+                var auxtimes = new List<Tuple<float, Vector3>>();
+                foreach (var timer in TimesHealth)
+                {
+                    var diffTime = timer.Item1 - Game.Time;
+
+                    if (diffTime > 0)
+                    {
+                        var seconds = Math.Floor(diffTime % 60);
+                        var minutes = Math.Floor(diffTime / 60);
+
+                        if (diffTime < 60)
+                        {
+                            minutes = 0;
+                        }
+
+                        var spellString = minutes <= 0 ? seconds + "" : minutes + ":" + seconds;
+
+                        Drawing.DrawText(Drawing.WorldToMinimap(timer.Item2).X - 5, Drawing.WorldToMinimap(timer.Item2).Y - 5,
+                            Color.White, // infos da cor
+                            spellString); // infos do escrito
+                    }
+                    else
+                    {
+                        auxtimes.Add(timer);
+                    }
+                }
+
+                if (auxtimes.Count > 0)
+                {
+                    TimesHealth = TimesHealth.Except(auxtimes).ToList();
                 }
             }
         }
@@ -87,7 +131,7 @@ namespace BrainDotExe.Draw
                 if (campIsDead)
                 {
                     var timer = new Tuple<float, Camp>(Game.Time + camp.RespawnTimer - 5, camp);
-                    times.Add(timer);
+                    Times.Add(timer);
                 }
 
                 camp.IsDead = campIsDead;
@@ -96,6 +140,11 @@ namespace BrainDotExe.Draw
 
         public static void GameObjectOnCreate(GameObject sender, EventArgs args)
         {
+            if (sender.Name.Contains("Odin"))
+            {
+                TimesHealth.Add(new Tuple<float, Vector3>(40 + Game.Time, sender.Position));
+            }
+
             if (!(sender is Obj_AI_Minion) || sender.Team != GameObjectTeam.Neutral)
             {
                 return;
@@ -118,6 +167,7 @@ namespace BrainDotExe.Draw
 
         public static void GameObjectOnDelete(GameObject sender, EventArgs args)
         {
+
             if (!(sender is Obj_AI_Minion) || sender.Team != GameObjectTeam.Neutral)
             {
                 return;
