@@ -27,6 +27,7 @@ namespace OneForWeek.Plugin.Hero
         public void Init()
         {
             InitVariables();
+            spells = new List<Spell.SpellBase>();
         }
 
         public void InitVariables()
