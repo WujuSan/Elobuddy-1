@@ -12,24 +12,29 @@ namespace OneForWeek
 {
     class Program
     {
+        public static PluginModel Champion;
+
         static void Main(string[] args)
         {
-            Loading.OnLoadingComplete += OnLoadCompleted;
+            Loading.OnLoadingComplete = OnLoadCompleted;
         }
 
         private static void OnLoadCompleted(EventArgs args)
         {
-            if(Player.Instance.ChampionName == "Caitlyn")
+
+            try
             {
-                new Caitlyn().Init();
-                Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, Player.Instance.ChampionName + " injected !", Color.DeepSkyBlue));
+                var handle = Activator.CreateInstance(null, "OneForWeek.Plugin.Hero." + ObjectManager.Player.ChampionName);
+                Champion = (PluginModel)handle.Unwrap();
+                Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, ObjectManager.Player.ChampionName +  " injected !", Color.DeepSkyBlue));
                 Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, "Addon by: MrArticuno", Color.Purple));
 
                 Igniter.Init();
             }
-            else
+            catch (Exception ex)
             {
-                Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, Player.Instance.ChampionName + " is Not Supported", Color.Red));
+                Console.WriteLine(ex.StackTrace);
+                Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, ObjectManager.Player.ChampionName + " is Not Supported", Color.Red));
             }
         }
     }
