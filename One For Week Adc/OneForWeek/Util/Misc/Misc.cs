@@ -15,6 +15,11 @@ namespace OneForWeek.Util.Misc
             return obj[value].Cast<CheckBox>().CurrentValue;
         }
 
+        public static bool IsKeyBindOn(Menu obj, string value)
+        {
+            return obj[value].Cast<KeyBind>().CurrentValue;
+        }
+
         public static int GetSliderValue(Menu obj, string value)
         {
             return obj[value].Cast<Slider>().CurrentValue;

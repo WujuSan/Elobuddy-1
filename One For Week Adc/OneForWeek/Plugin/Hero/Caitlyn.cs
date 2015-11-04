@@ -9,7 +9,6 @@ using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using OneForWeek.Util.Misc;
 using SharpDX;
-using OneForWeek.Plugin.Hero;
 using System.Collections.Generic;
 
 namespace OneForWeek.Plugin.Hero
@@ -22,7 +21,10 @@ namespace OneForWeek.Plugin.Hero
         public static Spell.Targeted R;
         private static List<Spell.SpellBase> spells;
 
-        private float _lastECast = 0f;
+        public Caitlyn()
+        {
+            Init();
+        }
 
         public void Init()
         {
@@ -62,7 +64,7 @@ namespace OneForWeek.Plugin.Hero
 
             DrawMenu = Menu.AddSubMenu("Draw - " + GCharname, GCharname + "Draw");
             DrawMenu.AddGroupLabel("Draw");
-            DrawMenu.Add("drawDisable", new CheckBox("Turn off all drawings", true));
+            DrawMenu.Add("drawDisable", new CheckBox("Turn off all drawings", false));
             DrawMenu.Add("drawQ", new CheckBox("Draw Q Range", true));
             DrawMenu.Add("drawW", new CheckBox("Draw W Range", true));
             DrawMenu.Add("drawE", new CheckBox("Draw E Range", true));
@@ -80,10 +82,12 @@ namespace OneForWeek.Plugin.Hero
             HarassMenu.Add("hsQ", new CheckBox("Use Q", true));
             HarassMenu.Add("hsW", new CheckBox("Use W", true));
             HarassMenu.Add("hsE", new CheckBox("Use E", true));
+            HarassMenu.Add("minManaPercent", new Slider("Min Mana Percent to use Skills: ", 50, 0, 100));
 
             LaneClearMenu = Menu.AddSubMenu("Lane Clear - " + GCharname, GCharname + "LaneClear");
             LaneClearMenu.AddGroupLabel("Lane Clear");
             LaneClearMenu.Add("lcQ", new CheckBox("Use Q", true));
+            LaneClearMenu.Add("minManaPercent", new Slider("Min Mana Percent to use Skills: ", 50, 0, 100));
 
             MiscMenu = Menu.AddSubMenu("Misc - " + GCharname, GCharname + "Misc");
             MiscMenu.Add("useNetForMousePos", new KeyBind("Use net for mouse Pos", false, KeyBind.BindTypes.HoldActive, 'T'));
@@ -116,7 +120,7 @@ namespace OneForWeek.Plugin.Hero
 
             if(W.IsReady() && Misc.IsChecked(ComboMenu, "comboW"))
             {
-                var predictionPos = Prediction.Position.PredictUnitPosition(target, 250).To3D();
+                var predictionPos = Prediction.Position.PredictUnitPosition(target, 500).To3D();
 
                 if (W.IsInRange(predictionPos))
                 {
@@ -144,7 +148,7 @@ namespace OneForWeek.Plugin.Hero
         {
             var target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
 
-            if (target == null || !target.IsValidTarget(Q.Range)) return;
+            if (target == null || !target.IsValidTarget(Q.Range) || Player.Instance.ManaPercent > Misc.GetSliderValue(HarassMenu, "minManaPercent")) return;
 
             if (target.Distance(Player.Instance) < Misc.GetSliderValue(MiscMenu, "minRangeForE") &&
                 (E.IsReady() && Misc.IsChecked(HarassMenu, "hsE")) &&
@@ -156,7 +160,7 @@ namespace OneForWeek.Plugin.Hero
 
             if (W.IsReady() && Misc.IsChecked(HarassMenu, "hsW"))
             {
-                var predictionPos = Prediction.Position.PredictUnitPosition(target, 250).To3D();
+                var predictionPos = Prediction.Position.PredictUnitPosition(target, 500).To3D();
 
                 if (W.IsInRange(predictionPos))
                 {
@@ -177,7 +181,9 @@ namespace OneForWeek.Plugin.Hero
 
         public void OnLaneClear()
         {
-            if (Misc.IsChecked(HarassMenu, "lcQ") && Q.IsReady())
+            if(Player.Instance.ManaPercent > Misc.GetSliderValue(LaneClearMenu, "minManaPercent")) return;
+
+            if (Misc.IsChecked(LaneClearMenu, "lcQ") && Q.IsReady())
             {
                 var bestpos = Misc.GetBestLineFarmLocation(EntityManager.MinionsAndMonsters.EnemyMinions.Where(m => Q.IsInRange(m) && !m.IsDead).Select(o => o.ServerPosition.To2D()).ToList(), Q.Width, Q.Range);
                 if(bestpos.MinionsHit >= 3)
@@ -194,6 +200,11 @@ namespace OneForWeek.Plugin.Hero
 
         public void OnGameUpdate(EventArgs args)
         {
+            if (Misc.IsKeyBindOn(MiscMenu, "useNetForMousePos") && E.IsReady())
+            {
+                Player.CastSpell(SpellSlot.E, Game.CursorPos.Extend(Player.Instance.Position, Player.Instance.Distance(Game.CursorPos) + 250).To3D());
+            }
+
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 OnCombo();
@@ -221,7 +232,6 @@ namespace OneForWeek.Plugin.Hero
             if (Misc.IsChecked(MiscMenu, "ksOn"))
             {
                 KS();
-                return;
             }
                 
         }
@@ -297,13 +307,12 @@ namespace OneForWeek.Plugin.Hero
         {
             var targets = EntityManager.Heroes.Enemies.Where(t => t.IsValidTarget(R.Range));
 
-            foreach(Obj_AI_Base target in targets)
+            foreach(var target in targets)
             {
                 if(target.Health < PossibleDamage(target, SpellSlot.R) &&
                     !Player.Instance.IsInAutoAttackRange(target) && 
                     CanCastSpell(SpellSlot.R, target) && 
-                    Misc.IsChecked(ComboMenu, "comboR") &&
-                    Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                    Misc.IsChecked(ComboMenu, "comboR"))
                 {
                     R.Cast(target);
                 }
@@ -337,14 +346,7 @@ namespace OneForWeek.Plugin.Hero
 
         private static bool CanCastSpell(SpellSlot spell, Obj_AI_Base target)
         {
-            foreach(Spell.SpellBase aux in spells)
-            {
-                if(aux.Slot == spell && aux.IsReady() && aux.IsInRange(target))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return spells.Any(aux => aux.Slot == spell && aux.IsReady() && aux.IsInRange(target));
         }
 
         private static float PossibleDamage(Obj_AI_Base target, SpellSlot spell)
