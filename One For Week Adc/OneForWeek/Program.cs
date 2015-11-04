@@ -16,7 +16,7 @@ namespace OneForWeek
 
         static void Main(string[] args)
         {
-            Loading.OnLoadingComplete = OnLoadCompleted;
+            Loading.OnLoadingComplete += OnLoadCompleted;
         }
 
         private static void OnLoadCompleted(EventArgs args)
