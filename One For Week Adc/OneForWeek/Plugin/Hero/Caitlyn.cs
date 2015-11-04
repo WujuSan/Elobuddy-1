@@ -11,17 +11,16 @@ using OneForWeek.Util.Misc;
 using SharpDX;
 using OneForWeek.Plugin.Hero;
 using System.Collections.Generic;
-using static EloBuddy.SDK.Spell;
 
 namespace OneForWeek.Plugin.Hero
 {
     class Caitlyn : PluginModel, IChampion
     {
-        public static Skillshot Q;
-        public static Skillshot W;
-        public static Skillshot E;
-        public static Targeted R;
-        private static List<SpellBase> spells;
+        public static Spell.Skillshot Q;
+        public static Spell.Skillshot W;
+        public static Spell.Skillshot E;
+        public static Spell.Targeted R;
+        private static List<Spell.SpellBase> spells;
 
         private float _lastECast = 0f;
 
@@ -37,13 +36,13 @@ namespace OneForWeek.Plugin.Hero
 
         public void InitVariables()
         {
-            Q = new Skillshot(SpellSlot.Q, 1240, SkillShotType.Linear, 250, 2000, 60);
+            Q = new Spell.Skillshot(SpellSlot.Q, 1240, SkillShotType.Linear, 250, 2000, 60);
             spells.Add(Q);
-            W = new Skillshot(SpellSlot.W, 820, SkillShotType.Circular, 500, int.MaxValue, 80);
+            W = new Spell.Skillshot(SpellSlot.W, 820, SkillShotType.Circular, 500, int.MaxValue, 80);
             spells.Add(W);
-            E = new Skillshot(SpellSlot.E, 800, SkillShotType.Linear, 250, 1600, 80);
+            E = new Spell.Skillshot(SpellSlot.E, 800, SkillShotType.Linear, 250, 1600, 80);
             spells.Add(E);
-            R = new Targeted(SpellSlot.R, 2000);
+            R = new Spell.Targeted(SpellSlot.R, 2000);
             spells.Add(R);
 
             InitMenu();
@@ -342,7 +341,7 @@ namespace OneForWeek.Plugin.Hero
 
         private static bool CanCastSpell(SpellSlot spell, Obj_AI_Base target)
         {
-            foreach(SpellBase aux in spells)
+            foreach(Spell.SpellBase aux in spells)
             {
                 if(aux.Slot == spell && aux.IsReady() && aux.IsInRange(target))
                 {
