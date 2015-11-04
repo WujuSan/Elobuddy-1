@@ -24,11 +24,6 @@ namespace OneForWeek.Plugin.Hero
 
         private float _lastECast = 0f;
 
-        public Caitlyn()
-        {
-            Init();
-        }
-
         public void Init()
         {
             InitVariables();

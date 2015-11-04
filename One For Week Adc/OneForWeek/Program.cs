@@ -21,7 +21,7 @@ namespace OneForWeek
         {
             if(Player.Instance.ChampionName == "Caitlyn")
             {
-                new Caitlyn();
+                new Caitlyn().Init();
                 Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, Player.Instance.ChampionName + " injected !", Color.DeepSkyBlue));
                 Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, "Addon by: MrArticuno", Color.Purple));
 
