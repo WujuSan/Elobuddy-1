@@ -221,7 +221,7 @@ namespace OneForWeek.Plugin.Hero
 
         }
 
-        public static double PossibleDamage(this AIHeroClient target)
+        public static double PossibleDamage(AIHeroClient target)
         {
             var damage = 0d;
             var targetMaxHealth = target.MaxHealth;

@@ -6,7 +6,7 @@ using SharpDX;
 
 namespace OneForWeek.Plugin
 {
-    abstract class PluginModel
+    public abstract class PluginModel
     {
         #region Global Variables
 
