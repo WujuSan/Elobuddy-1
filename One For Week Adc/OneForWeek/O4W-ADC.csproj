@@ -76,6 +76,7 @@
     <Compile Include="Model\ActionQueue\ActionQueueItem.cs" />
     <Compile Include="Model\ActionQueue\ActionQueueList.cs" />
     <Compile Include="Model\Notification\NotificationModel.cs" />
+    <Compile Include="Plugin\Hero\Vayne.cs" />
     <Compile Include="Plugin\Hero\Caitlyn.cs" />
     <Compile Include="Plugin\IChampion.cs" />
     <Compile Include="Plugin\PluginModel.cs" />
