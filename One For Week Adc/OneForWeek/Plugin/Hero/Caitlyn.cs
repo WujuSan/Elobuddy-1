@@ -148,7 +148,7 @@ namespace OneForWeek.Plugin.Hero
         {
             var target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
 
-            if (target == null || !target.IsValidTarget(Q.Range) || Player.Instance.ManaPercent > Misc.GetSliderValue(HarassMenu, "minManaPercent")) return;
+            if (target == null || !target.IsValidTarget(Q.Range) || Player.Instance.ManaPercent < Misc.GetSliderValue(HarassMenu, "minManaPercent")) return;
 
             if (target.Distance(Player.Instance) < Misc.GetSliderValue(MiscMenu, "minRangeForE") &&
                 (E.IsReady() && Misc.IsChecked(HarassMenu, "hsE")) &&
@@ -181,7 +181,7 @@ namespace OneForWeek.Plugin.Hero
 
         public void OnLaneClear()
         {
-            if(Player.Instance.ManaPercent > Misc.GetSliderValue(LaneClearMenu, "minManaPercent")) return;
+            if(Player.Instance.ManaPercent < Misc.GetSliderValue(LaneClearMenu, "minManaPercent")) return;
 
             if (Misc.IsChecked(LaneClearMenu, "lcQ") && Q.IsReady())
             {
@@ -270,7 +270,7 @@ namespace OneForWeek.Plugin.Hero
 
         public void OnGapCloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            if(!sender.IsEnemy && e.End.Distance(Player.Instance) <= 50) return;
+            if(!sender.IsEnemy || e.End.Distance(Player.Instance) <= 50) return;
 
             if (W.IsReady() && W.IsInRange(sender) && Misc.IsChecked(MiscMenu, "miscAntiGapW"))
             {

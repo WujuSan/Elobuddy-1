@@ -21,7 +21,6 @@ namespace OneForWeek
 
         private static void OnLoadCompleted(EventArgs args)
         {
-
             try
             {
                 var handle = Activator.CreateInstance(null, "OneForWeek.Plugin.Hero." + ObjectManager.Player.ChampionName);
