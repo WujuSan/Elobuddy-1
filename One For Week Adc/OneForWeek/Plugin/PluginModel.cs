@@ -1,8 +1,5 @@
 ﻿using EloBuddy;
 using EloBuddy.SDK.Menu;
-using OneForWeek.Draw.Notifications;
-using OneForWeek.Model.Notification;
-using SharpDX;
 
 namespace OneForWeek.Plugin
 {

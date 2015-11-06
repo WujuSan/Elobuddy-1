@@ -193,10 +193,7 @@ namespace OneForWeek.Plugin.Hero
             }
         }
 
-        public void OnFlee()
-        {
-
-        }
+        public void OnFlee(){}
 
         public void OnGameUpdate(EventArgs args)
         {

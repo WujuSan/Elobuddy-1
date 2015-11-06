@@ -88,6 +88,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Util\ActionManager\ActionManager.cs" />
+    <Compile Include="Util\Misc\O4WExtensions.cs" />
     <Compile Include="Util\Misc\Igniter.cs" />
     <Compile Include="Util\Misc\MEC.cs" />
     <Compile Include="Util\Misc\Misc.cs" />
