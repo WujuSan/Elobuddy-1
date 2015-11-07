@@ -158,10 +158,10 @@ namespace OneForWeek.Plugin.Hero
                         E.Cast(priorityTarget);
                     }
 
-                    if (priorityTarget.VayneWStacks() == 2 && PossibleDamage(priorityTarget) > priorityTarget.Health)
+                    /*if (priorityTarget.VayneWStacks() == 2 && PossibleDamage(priorityTarget) > priorityTarget.Health)
                     {
                         E.Cast(priorityTarget);
-                    }
+                    }*/
                 }
             }
 
@@ -383,7 +383,7 @@ namespace OneForWeek.Plugin.Hero
             var damage = 0d;
             var targetMaxHealth = target.MaxHealth;
 
-            var silverBoltDmg = (new float[] { 0, 20, 30, 40, 50, 60 }[Player.Instance.Spellbook.GetSpell(SpellSlot.W).Level] + new float[] { 0, targetMaxHealth / 4, targetMaxHealth / 5, targetMaxHealth / 6, targetMaxHealth / 7, targetMaxHealth / 8 }[Player.Instance.Spellbook.GetSpell(SpellSlot.W).Level]);
+            var silverBoltDmg = (new[] { 0, targetMaxHealth / 4, targetMaxHealth / 5, targetMaxHealth / 6, targetMaxHealth / 7, targetMaxHealth / 8 }[Player.Instance.Spellbook.GetSpell(SpellSlot.W).Level]);
 
             if (target.GetBuffCount("vaynesilvereddebuff") == 2) damage += silverBoltDmg;
 
