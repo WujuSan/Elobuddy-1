@@ -7,6 +7,7 @@ using EloBuddy.SDK.Rendering;
 using SharpDX;
 using System;
 using System.Linq;
+using EloBuddy.SDK.Constants;
 using Color = System.Drawing.Color;
 
 namespace BrainDotExe.Draw
@@ -26,10 +27,10 @@ namespace BrainDotExe.Draw
             CloneRevealerMenu.AddGroupLabel("Clone Revealer");
             CloneRevealerMenu.Add("drawClones", new CheckBox("Show Clones", true));
 
-            Drawing.OnDraw += AttackRange_OnDraw;
+            Drawing.OnEndScene += CloneRevelaer_OnDraw;
         }
 
-        public static void AttackRange_OnDraw(EventArgs args)
+        public static void CloneRevelaer_OnDraw(EventArgs args)
         {
             if (Misc.isChecked(Program.DrawMenu, "drawDisable")) return;
 

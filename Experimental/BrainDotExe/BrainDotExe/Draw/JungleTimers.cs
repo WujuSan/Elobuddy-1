@@ -35,7 +35,6 @@ namespace BrainDotExe.Draw
 
         public static void JungleTimers_OnDraw(EventArgs args)
         {
-
             if (Misc.isChecked(Program.DrawMenu, "drawDisable")) return;
 
             if (Misc.isChecked(JungleTimersMenu, "drawTimers"))

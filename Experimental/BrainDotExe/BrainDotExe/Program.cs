@@ -33,6 +33,7 @@ namespace BrainDotExe
             SmiteME.Init();
             BlinkDetector.Init();
             WardTracker.Init();
+            LastSeenPosition.Init();
 
         }
 
@@ -47,7 +48,7 @@ namespace BrainDotExe
             get { return ObjectManager.Player; }
         }
 
-        public static String G_version = "1.5.0";
+        public static String G_version = "1.6.0";
         public static String G_charname = _Player.ChampionName;
 
         /*
