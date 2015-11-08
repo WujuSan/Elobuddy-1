@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Rendering;
-using Font = SharpDX.Direct3D9.Font;
 using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Menu;
 using BrainDotExe.Util;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 namespace BrainDotExe.Draw
 {
@@ -24,14 +25,17 @@ namespace BrainDotExe.Draw
         private static int SummonerSpellX; // Coor of X Summoner Spell
         private static int SummonerSpellY; // Coor of Y Summoner Spell
 
-        static Font DisplayTextFont = new Font(Drawing.Direct3DDevice, new System.Drawing.Font("Tahoma", 10)); // Text Font
+        //static Font DisplayTextFont = new Font(Drawing.Direct3DDevice, new System.Drawing.Font("Tahoma", 10)); // Text Font
         private static string GetSummonerSpellName;
 
         public static SpellSlot[] SummonerSpellSlots = { SpellSlot.Summoner1, SpellSlot.Summoner2 };
         public static SpellSlot[] SpellSlots = { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
 
+        private static Text Text { get; set; }
+
         public static void Init()
         {
+            Text = new Text("", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold)) { Color = Color.White };
             CooldonMenu = Program.Menu.AddSubMenu("Tracker ", "cooldownDraw");
             CooldonMenu.AddGroupLabel("Tracker Cooldown");
             CooldonMenu.Add("drawCoolDowns", new CheckBox("Draw Cooldown of abilities", true));
@@ -59,17 +63,7 @@ namespace BrainDotExe.Draw
                     var getSpellCD = getSpell.CooldownExpires - Game.Time;
                     var spellString = string.Format(getSpellCD < 1f ? "{0:0.0}" : "{0:0}", getSpellCD);
 
-                    Drawing.DrawText(X, Y,
-                        getSpell.Level < 1 ? Color.Gray : getSpellCD > 0 && getSpellCD <= 4 ? Color.Red : getSpellCD > 0 ? Color.Yellow : Color.White, // infos da cor
-                        getSpellCD > 0 ? spellString : SpellSlots[spell].ToString()); // infos do escrito
-                    /*
-                    DisplayTextFont.DrawText(null,
-                        getSpellCD > 0 ? spellString : SpellSlots[spell].ToString(),
-                        X,
-                        Y,
-                        getSpell.Level < 1 ? SharpDX.Color.Gray : getSpellCD > 0 && getSpellCD <= 4 ? SharpDX.Color.Red : getSpellCD > 0 ? SharpDX.Color.Yellow : SharpDX.Color.White
-                        );
-                        */
+                    Text.Draw(getSpellCD > 0 ? spellString : SpellSlots[spell].ToString(), getSpell.Level < 1 ? Color.Gray : getSpellCD > 0 && getSpellCD <= 4 ? Color.Red : getSpellCD > 0 ? Color.Yellow : Color.White, new Vector2(X, Y));
                 }
 
                 for (int summoner = 0; summoner < SummonerSpellSlots.Count(); summoner++)
@@ -128,25 +122,14 @@ namespace BrainDotExe.Draw
 
                         case "summonersnowball":
                             GetSummonerSpellName = "M";
-                            break;
+                            break;//keke
 
                         default:
                             GetSummonerSpellName = "S";
                             break;
                     }
-                    Drawing.DrawText(SummonerSpellX, SummonerSpellY,
-                        getSummonerCD > 0 ?
-                        Color.Red : Color.White,
-                        getSummonerCD > 0 ? summonerString : GetSummonerSpellName
-                        );
-
-                    //DisplayTextFont.DrawText(null, 
-                    //    getSummonerCD > 0 ? GetSummonerSpellName + " " + summonerString : GetSummonerSpellName,
-                    //    SummonerSpellX,
-                    //    SummonerSpellY,
-                    //    getSummonerCD > 0 ?
-                    //    SharpDX.Color.Red : SharpDX.Color.White
-                    //    );
+                    Text.Draw(getSummonerCD > 0 ? summonerString : GetSummonerSpellName, getSummonerCD > 0 ?
+                        Color.Red : Color.White, new Vector2(SummonerSpellX, SummonerSpellY));
                 }
 
             }

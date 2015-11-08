@@ -19,6 +19,7 @@ namespace BrainDotExe.Draw
         public static Menu LastSeenPositionMenu;
 
         private static readonly IList<HeroTracker> _heroTrackers = new List<HeroTracker>();
+        public static Text Text { get; set; }
 
         public static AIHeroClient _Player
         {
@@ -27,6 +28,7 @@ namespace BrainDotExe.Draw
 
         public static void Init()
         {
+            Text = new Text("", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold)) { Color = Color.White };
             LastSeenPositionMenu = Program.Menu.AddSubMenu("Last Seen Position ", "lastSeenDraw");
             LastSeenPositionMenu.AddGroupLabel("Last Seen Position");
             LastSeenPositionMenu.Add("drawEnd", new CheckBox("Show the last enemy position", true));
@@ -36,7 +38,6 @@ namespace BrainDotExe.Draw
             {
                 _heroTrackers.Add(new HeroTracker(aiHeroClient, ImageLoader.Load(aiHeroClient.ChampionName)));
             }
-
         }
     }
 
@@ -117,9 +118,7 @@ namespace BrainDotExe.Draw
             {
                 if (!Hero.IsHPBarRendered && !Hero.IsDead)
                 {
-                    Drawing.DrawText(Drawing.WorldToMinimap(LastLocation).X - 5, Drawing.WorldToMinimap(LastLocation).Y + 10,
-                            Color.White, // infos da cor
-                            Format(Game.Time - LastSeen)); // infos do escrito
+                    LastSeenPosition.Text.Draw(Format(Game.Time - LastSeen), Color.White, new Vector2(Drawing.WorldToMinimap(LastLocation).X - 5, Drawing.WorldToMinimap(LastLocation).Y + 10));
                 }
             }
         }
