@@ -35,7 +35,7 @@ namespace BrainDotExe.Draw
 
         public static void Init()
         {
-            Text = new Text("", new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold)) { Color = Color.White };
+            Text = new Text("", new Font(FontFamily.GenericSansSerif, 9, FontStyle.Regular)) { Color = Color.White };
             CooldonMenu = Program.Menu.AddSubMenu("Tracker ", "cooldownDraw");
             CooldonMenu.AddGroupLabel("Tracker Cooldown");
             CooldonMenu.Add("drawCoolDowns", new CheckBox("Draw Cooldown of abilities", true));
@@ -58,8 +58,8 @@ namespace BrainDotExe.Draw
                 for (int spell = 0; spell < SpellSlots.Count(); spell++)
                 {
                     var getSpell = Heroes.Spellbook.GetSpell(SpellSlots[spell]);
-                    X = (int)Heroes.HPBarPosition.X - 12 + (spell * 25);
-                    Y = (int)Heroes.HPBarPosition.Y + 35;
+                    X = (int)Heroes.HPBarPosition.X + 5 + (spell * 25);
+                    Y = (int)Heroes.HPBarPosition.Y + 25;
                     var getSpellCD = getSpell.CooldownExpires - Game.Time;
                     var spellString = string.Format(getSpellCD < 1f ? "{0:0.0}" : "{0:0}", getSpellCD);
 
@@ -68,7 +68,7 @@ namespace BrainDotExe.Draw
 
                 for (int summoner = 0; summoner < SummonerSpellSlots.Count(); summoner++)
                 {
-                    SummonerSpellX = (int)Heroes.HPBarPosition.X - 25;
+                    SummonerSpellX = (int)Heroes.HPBarPosition.X - 15;
                     SummonerSpellY = (int)Heroes.HPBarPosition.Y + 1 + (summoner * 20);
 
                     var getSummoner = Heroes.Spellbook.GetSpell(SummonerSpellSlots[summoner]);
