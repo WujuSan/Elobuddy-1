@@ -73,6 +73,7 @@ namespace OneForWeek.Plugin.Hero
             ComboMenu.AddGroupLabel("Combo");
             ComboMenu.Add("comboQ", new CheckBox("Use Q", true));
             ComboMenu.Add("comboE", new CheckBox("Use E", true));
+            ComboMenu.Add("comboFE", new CheckBox("Finisher E", false));
             ComboMenu.Add("comboR", new CheckBox("Use R", true));
             ComboMenu.Add("minEnemiesInRange", new Slider("Min enemies in range for R: ", 2, 1, 5));
 
@@ -158,10 +159,10 @@ namespace OneForWeek.Plugin.Hero
                         E.Cast(priorityTarget);
                     }
 
-                    /*if (priorityTarget.VayneWStacks() == 2 && PossibleDamage(priorityTarget) > priorityTarget.Health)
+                    if (priorityTarget.VayneWStacks() == 2 && PossibleDamage(priorityTarget) > priorityTarget.Health && Misc.IsChecked(ComboMenu, "comboFE"))
                     {
                         E.Cast(priorityTarget);
-                    }*/
+                    }
                 }
             }
 
@@ -387,7 +388,7 @@ namespace OneForWeek.Plugin.Hero
 
             if (target.GetBuffCount("vaynesilvereddebuff") == 2) damage += silverBoltDmg;
 
-            return damage;
+            return damage + 150;
         }
 
         public static bool IsCondemnable(AIHeroClient target)
