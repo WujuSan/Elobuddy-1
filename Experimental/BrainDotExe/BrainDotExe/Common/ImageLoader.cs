@@ -3,7 +3,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using BrainDotExe.Draw;
 using BrainDotExe.Properties;
+using BrainDotExe.Util;
 using EloBuddy;
 
 namespace BrainDotExe.Common
@@ -29,7 +31,7 @@ namespace BrainDotExe.Common
 
         private static string GetCachedPath(string championName)
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BrainExeCache");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CU");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -70,7 +72,7 @@ namespace BrainDotExe.Common
         {
             var bmp = new Bitmap(img.Width, img.Height);
             var graphics = Graphics.FromImage(bmp);
-            var colormatrix = new ColorMatrix { Matrix33 = 95 };
+            var colormatrix = new ColorMatrix { Matrix33 = 15 };
             var imgAttribute = new ImageAttributes();
             imgAttribute.SetColorMatrix(colormatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             graphics.DrawImage(

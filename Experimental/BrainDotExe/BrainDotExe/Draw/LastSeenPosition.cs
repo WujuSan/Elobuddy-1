@@ -49,7 +49,7 @@ namespace BrainDotExe.Draw
             var image = new Render.Sprite(bmp, new Vector2(0, 0));
             image.GrayScale();
             image.Scale = new Vector2(0.5f, 0.5f);
-            image.VisibleCondition = sender => !hero.IsHPBarRendered && !hero.IsDead;
+            image.VisibleCondition = sender => !hero.IsHPBarRendered && !hero.IsDead && Misc.isChecked(LastSeenPosition.LastSeenPositionMenu, "drawEnd");
             image.PositionUpdate = delegate
             {
                 var v2 = Drawing.WorldToMinimap(LastLocation);
@@ -106,15 +106,17 @@ namespace BrainDotExe.Draw
         {
             if (Misc.isChecked(Program.DrawMenu, "drawDisable")) return;
 
-            if (Misc.isChecked(LastSeenPosition.LastSeenPositionMenu, "drawEnd"))
+            if (!Misc.isChecked(LastSeenPosition.LastSeenPositionMenu, "drawEnd"))
             {
-                if (!Hero.IsHPBarRendered)
-                {
-                    ImageLoader.Load(Hero.ChampionName);
-                }
+                return;
             }
 
-            if(Misc.isChecked(LastSeenPosition.LastSeenPositionMenu, "drawSeconds"))
+            if (!Hero.IsHPBarRendered)
+            {
+                ImageLoader.Load(Hero.ChampionName);
+            }
+
+            if (Misc.isChecked(LastSeenPosition.LastSeenPositionMenu, "drawSeconds"))
             {
                 if (!Hero.IsHPBarRendered && !Hero.IsDead)
                 {
