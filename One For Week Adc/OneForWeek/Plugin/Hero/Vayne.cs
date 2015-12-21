@@ -319,28 +319,28 @@ namespace OneForWeek.Plugin.Hero
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && Misc.IsChecked(ComboMenu, "comboQ") && Q.IsReady())
             {
-                if (target == null || !target.IsValidTarget()) return;
+                if (target == null || !target.IsValidTarget() || target.IsDead) return;
                 Player.CastSpell(SpellSlot.Q, target.GetTumblePos());
                 Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
             }
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) && Misc.IsChecked(HarassMenu, "hsQ") && Q.IsReady() && Player.Instance.ManaPercent > Misc.GetSliderValue(HarassMenu, "minManaPercent"))
             {
-                if (target == null || !target.IsValidTarget()) return;
+                if (target == null || !target.IsValidTarget() || target.IsDead) return;
                 Player.CastSpell(SpellSlot.Q, target.GetTumblePos());
                 Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
             }
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) && Misc.IsChecked(LastHitMenu, "lhQ") && Q.IsReady() && Player.Instance.ManaPercent > Misc.GetSliderValue(LastHitMenu, "minManaPercent"))
             {
-                foreach (var minion in EntityManager.MinionsAndMonsters.EnemyMinions.Where(m => m.Distance(Player.Instance) < Player.Instance.GetAutoAttackRange() + Q.Range && Player.Instance.GetAutoAttackDamage(m) > m.Health))
+                foreach (var minion in EntityManager.MinionsAndMonsters.EnemyMinions.Where(m => m.Distance(Player.Instance) < Player.Instance.GetAutoAttackRange() + Q.Range && Player.Instance.GetAutoAttackDamage(m) > m.Health && !target.IsDead))
                 {
                     Player.CastSpell(SpellSlot.Q, minion.Position);
                     Core.DelayAction(Orbwalker.ResetAutoAttack, 250);
                 }
             }
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && Misc.IsChecked(LaneClearMenu, "lcQ") && Q.IsReady() && Player.Instance.ManaPercent > Misc.GetSliderValue(LaneClearMenu, "minManaPercent"))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && Misc.IsChecked(LaneClearMenu, "lcQ") && Q.IsReady() && Player.Instance.ManaPercent > Misc.GetSliderValue(LaneClearMenu, "minManaPercent") && !target.IsDead)
             {
                 Player.CastSpell(SpellSlot.Q, Game.CursorPos);
                 Core.DelayAction(Orbwalker.ResetAutoAttack, 250);

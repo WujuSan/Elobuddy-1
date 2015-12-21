@@ -27,6 +27,7 @@ namespace OneForWeek
                 Champion = (PluginModel)handle.Unwrap();
                 Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, ObjectManager.Player.ChampionName +  " injected !", Color.DeepSkyBlue));
                 Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, "Addon by: MrArticuno", Color.Purple));
+                Notification.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, "Jinx is in BETA !", Color.Purple));
 
                 Igniter.Init();
             }
