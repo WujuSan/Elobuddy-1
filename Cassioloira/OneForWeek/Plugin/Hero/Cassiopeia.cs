@@ -234,7 +234,7 @@ namespace OneForWeek.Plugin.Hero
                 if (Misc.IsChecked(LaneClearMenu, "lcKE"))
                 {
                     var minion =
-                        EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(
+                        EntityManager.MinionsAndMonsters.EnemyMinions.First(
                             t =>
                                 t.IsValidTarget(E.Range) && _Player.GetSpellDamage(t, SpellSlot.E) > t.Health &&
                                 (!Misc.IsChecked(LaneClearMenu, "lcPE") || IsPoisoned(t)));
@@ -245,7 +245,7 @@ namespace OneForWeek.Plugin.Hero
                 else
                 {
                     var minion =
-                        EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(
+                        EntityManager.MinionsAndMonsters.EnemyMinions.First(
                             t =>
                                 t.IsValidTarget(E.Range) &&
                                 (Misc.IsChecked(LaneClearMenu, "lcPE") || IsPoisoned(t)));
@@ -415,7 +415,7 @@ namespace OneForWeek.Plugin.Hero
 
         public bool IsPoisoned(Obj_AI_Base target)
         {
-            return target.Buffs.Where(o => o.IsValid()).Any(buff => buff.DisplayName.Contains("Cassiopeia"));
+            return target.HasBuffOfType(BuffType.Poison);
         }
     }
 }
