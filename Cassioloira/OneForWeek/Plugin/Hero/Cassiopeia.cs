@@ -151,13 +151,20 @@ namespace OneForWeek.Plugin.Hero
                     Core.DelayAction(() => R.Cast(target), 250);
                 }
 
-                var countFacing = EntityManager.Heroes.Enemies.Count(t => t.IsValidTarget(R.Range) && t.IsFacing(_Player));
+                var countFacing = EntityManager.Heroes.Enemies.Count(t => t.IsValidTarget(R.Range) && t.IsFacing(_Player) && ProbablyFacing(t));
 
                 if (Misc.GetSliderValue(ComboMenu, "rsMinEnemiesForR") <= countFacing && target.IsFacing(_Player) && target.IsValidTarget(R.Range - 50))
                 {
                     R.Cast(target);
                 }
             }
+        }
+
+        private bool ProbablyFacing(Obj_AI_Base target)
+        {
+            var predictPos = Prediction.Position.PredictUnitPosition(target, 250);
+
+            return predictPos.Distance(Player.Instance.ServerPosition)  < target.ServerPosition.Distance(Player.Instance.ServerPosition);
         }
 
         public void OnHarass()
