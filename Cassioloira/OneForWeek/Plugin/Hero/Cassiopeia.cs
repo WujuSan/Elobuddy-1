@@ -112,7 +112,7 @@ namespace OneForWeek.Plugin.Hero
             {
                 var predictionQ = Q.GetPrediction(target);
 
-                if (predictionQ.HitChancePercent >= 70)
+                if (predictionQ.HitChancePercent >= 75)
                 {
                     Q.Cast(predictionQ.CastPosition);
                 }
@@ -122,7 +122,7 @@ namespace OneForWeek.Plugin.Hero
             {
                 var predictionQ = Q.GetPrediction(target);
 
-                if (predictionQ.HitChancePercent >= 70)
+                if (predictionQ.HitChancePercent >= 75)
                 {
                     Q.Cast(predictionQ.CastPosition);
                 }
