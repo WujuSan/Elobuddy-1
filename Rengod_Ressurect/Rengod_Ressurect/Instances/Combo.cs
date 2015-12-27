@@ -13,12 +13,39 @@ namespace Rengod_Ressurect.Instances
     static class Combo
     {
         public static int CheckCount = 0;
+        public static bool useQ = false;
+
+        static Combo()
+        {
+            Orbwalker.OnPostAttack += AfterAutoAttack;
+        }
+
+        private static void AfterAutoAttack(AttackableUnit target, EventArgs args)
+        {
+            if (!useQ) return;
+
+            Spells.Q.Cast();
+
+            useQ = false;
+        }
 
         public static void DoCombo()
         {
             var target = TargetSelector.GetTarget(Spells.E.Range, DamageType.Physical);
 
             if (!target.IsValidTarget(Spells.E.Range)) return;
+
+            if (Player.HasBuff(Globals.RENGAR_UTIMATE_DISPLAY_NAME) || Player.HasBuff(Globals.RENGAR_UTIMATE_NAME))
+            {
+                if (Player.Instance.IsInAutoAttackRange(target))
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                }
+                else
+                {
+                    return;
+                }
+            }
 
             switch (MenuCreator.GetSliderValue(MenuCreator.ComboMenu, "combo.type"))
             {
@@ -37,11 +64,7 @@ namespace Rengod_Ressurect.Instances
 
         private static void FocusQ(Obj_AI_Base target)
         {
-            if ((Player.HasBuff(Globals.RENGAR_UTIMATE_DISPLAY_NAME) || Player.HasBuff(Globals.RENGAR_UTIMATE_NAME)) && Player.Instance.IsInAutoAttackRange(target))
-            {
-                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-            }
-            else if (Player.Instance.Mana < 5)
+            if (Player.Instance.Mana < 5)
             {
                 if (Spells.E.IsReady() && Spells.E.IsInRange(target))
                 {
@@ -54,7 +77,7 @@ namespace Rengod_Ressurect.Instances
 
                 if (Spells.Q.IsReady() && Player.Instance.IsInAutoAttackRange(target))
                 {
-                    Spells.Q.Cast();
+                    useQ = true;
                 }
 
                 if (Spells.W.IsReady() && Player.Instance.IsInAutoAttackRange(target))
@@ -66,7 +89,7 @@ namespace Rengod_Ressurect.Instances
             {
                 if (Spells.Q.IsReady() && Player.Instance.IsInAutoAttackRange(target))
                 {
-                    Spells.Q.Cast();
+                    useQ = true;
                 }
                 else if (Spells.E.IsReady() && Spells.E.IsInRange(target))
                 {
@@ -82,11 +105,7 @@ namespace Rengod_Ressurect.Instances
 
         private static void FocusW(Obj_AI_Base target)
         {
-            if ((Player.HasBuff(Globals.RENGAR_UTIMATE_DISPLAY_NAME) || Player.HasBuff(Globals.RENGAR_UTIMATE_NAME)) && Player.Instance.IsInAutoAttackRange(target))
-            {
-                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-            }
-            else if (Player.Instance.Mana < 5)
+            if (Player.Instance.Mana < 5)
             {
                 if (Spells.E.IsReady() && Spells.E.IsInRange(target))
                 {
@@ -99,7 +118,7 @@ namespace Rengod_Ressurect.Instances
 
                 if (Spells.Q.IsReady() && Player.Instance.IsInAutoAttackRange(target))
                 {
-                    Spells.Q.Cast();
+                    useQ = true;
                 }
 
                 if (Spells.W.IsReady() && Player.Instance.IsInAutoAttackRange(target))
@@ -118,11 +137,7 @@ namespace Rengod_Ressurect.Instances
 
         private static void FocusE(Obj_AI_Base target)
         {
-            if ((Player.HasBuff(Globals.RENGAR_UTIMATE_DISPLAY_NAME) || Player.HasBuff(Globals.RENGAR_UTIMATE_NAME)) && Player.Instance.IsInAutoAttackRange(target))
-            {
-                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-            }
-            else if (Player.Instance.Mana < 5)
+            if (Player.Instance.Mana < 5)
             {
                 if (Spells.E.IsReady() && Spells.E.IsInRange(target))
                 {
@@ -135,7 +150,7 @@ namespace Rengod_Ressurect.Instances
 
                 if (Spells.Q.IsReady() && Player.Instance.IsInAutoAttackRange(target))
                 {
-                    Spells.Q.Cast();
+                    useQ = true;
                 }
 
                 if (Spells.W.IsReady() && Player.Instance.IsInAutoAttackRange(target))
@@ -157,7 +172,7 @@ namespace Rengod_Ressurect.Instances
                 {
                     if (Spells.Q.IsReady() && Player.Instance.IsInAutoAttackRange(target))
                     {
-                        Spells.Q.Cast();
+                        useQ = true;
                     }
                 }
 

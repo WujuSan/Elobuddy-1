@@ -26,6 +26,7 @@ namespace Rengod_Ressurect
 
             MenuCreator.Init();
             ItemManager.Init();
+            Draw.Init();
 
             Game.OnTick += OnTick;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;

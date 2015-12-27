@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,7 +51,7 @@ namespace Rengod_Ressurect.Util
         public static float QDamage(Obj_AI_Base target)
         {
             return Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical,
-                   qDamage[Q.Level - 1] + qDamagePercent[Q.Level] * Player.Instance.FlatPhysicalDamageMod);
+                   qDamage[Q.Level - 1] + (qDamagePercent[Q.Level - 1] / 100f) * Player.Instance.FlatPhysicalDamageMod);
         }
 
         public static float WDamage(Obj_AI_Base target)
