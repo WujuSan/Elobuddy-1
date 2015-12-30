@@ -3,6 +3,8 @@ using EloBuddy;
 using EloBuddy.SDK.Events;
 using LevelZero.Model.Values;
 using System.Collections.Generic;
+using static EloBuddy.SDK.Spell;
+using EloBuddy.SDK.Enumerations;
 
 namespace LevelZero.Core.Champions
 {
@@ -10,7 +12,13 @@ namespace LevelZero.Core.Champions
     {
         public override void Init()
         {
-
+            Spells = new List<SpellBase>
+            {
+                new Active(SpellSlot.Q),
+                new Skillshot(SpellSlot.W, 1100, SkillShotType.Circular),
+                new Targeted(SpellSlot.E, 600),
+                new Targeted(SpellSlot.R, 600)
+            };
         }
 
         public override void InitMenu()
