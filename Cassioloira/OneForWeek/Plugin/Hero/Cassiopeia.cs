@@ -71,7 +71,7 @@ namespace OneForWeek.Plugin.Hero
             ComboMenu.Add("disableAA", new CheckBox("Disable AA while combo", false));
             ComboMenu.AddLabel("This option overrides min enemies for R");
             ComboMenu.Add("flashCombo", new CheckBox("Flash R Combo if Killable", false));
-            ComboMenu.Add("rsMinEnemiesForR", new Slider("Min Enemies Facing for cast R: ", 2, 1, 5));
+            ComboMenu.Add("rsMinEnemiesForR", new Slider("Min Enemies Facing for cast R: ", 2, 0, 5));
 
             HarassMenu = Menu.AddSubMenu("Harass - " + GCharname, GCharname + "Harass");
             HarassMenu.AddGroupLabel("Harass");
@@ -131,7 +131,7 @@ namespace OneForWeek.Plugin.Hero
                 }
             }
 
-            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && (!IsPoisoned(target) || target.Distance(_Player) < W.Range - 150 || !Q.IsReady()))
+            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && (!IsPoisoned(target) || !Q.IsReady()))
             {
                 var predictionW = W.GetPrediction(target);
 
