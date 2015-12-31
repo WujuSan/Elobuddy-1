@@ -72,6 +72,7 @@ namespace OneForWeek.Plugin.Hero
             ComboMenu.Add("comboE", new CheckBox("Use E", true));
             ComboMenu.Add("comboR", new CheckBox("Use R", true));
             ComboMenu.AddGroupLabel("Combo Misc");
+            ComboMenu.Add("castWifQnotLand", new CheckBox("Use W if Q not land", true));
             ComboMenu.Add("disableAA", new CheckBox("Disable AA while combo", false));
             ComboMenu.AddLabel("This option overrides min enemies for R");
             ComboMenu.Add("flashCombo", new CheckBox("Flash R Combo if Killable", false));
@@ -93,6 +94,15 @@ namespace OneForWeek.Plugin.Hero
             LaneClearMenu.Add("lcE", new CheckBox("Use E", true));
             LaneClearMenu.Add("lcKE", new CheckBox("Only E if killable", false));
             LaneClearMenu.Add("lcPE", new CheckBox("Only E if poisoned", true));
+
+            JungleClearMenu = Menu.AddSubMenu("Jungle Clear - " + GCharname, GCharname + "JungleClear");
+            JungleClearMenu.AddGroupLabel("Jungle Clear");
+            JungleClearMenu.Add("jcQ", new CheckBox("Use Q", true));
+            JungleClearMenu.Add("jcW", new CheckBox("Use W", true));
+            JungleClearMenu.Add("jcE", new CheckBox("Use E", true));
+            JungleClearMenu.Add("jcKE", new CheckBox("Only E if killable", false));
+            JungleClearMenu.Add("jcPE", new CheckBox("Only E if poisoned", true));
+
 
             MiscMenu = Menu.AddSubMenu("Misc - " + GCharname, GCharname + "Misc");
             MiscMenu.Add("skin", new Slider("Skin Changer: ", 1, 1, 5));
@@ -135,7 +145,7 @@ namespace OneForWeek.Plugin.Hero
                 }
             }
 
-            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && (!IsPoisoned(target) || !Q.IsReady()))
+            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && ((!IsPoisoned(target) || !Q.IsReady()) && Misc.IsChecked(ComboMenu, "castWifQnotLand")))
             {
                 var predictionW = W.GetPrediction(target);
 
@@ -271,6 +281,61 @@ namespace OneForWeek.Plugin.Hero
 
         }
 
+        public void OnJungleClear()
+        {
+            var minions = EntityManager.MinionsAndMonsters.Monsters;
+
+            if (minions == null || !minions.Any()) return;
+
+            var bestFarmQ =
+                Misc.GetBestCircularFarmLocation(
+                    EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.Distance(_Player) <= Q.Range)
+                        .Select(xm => xm.ServerPosition.To2D())
+                        .ToList(), Q.Width, Q.Range);
+            var bestFarmW =
+                Misc.GetBestCircularFarmLocation(
+                    EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.Distance(_Player) <= W.Range)
+                        .Select(xm => xm.ServerPosition.To2D())
+                        .ToList(), W.Width, W.Range);
+
+            if (Misc.IsChecked(LaneClearMenu, "jcQ") && Q.IsReady() && bestFarmQ.MinionsHit > 0)
+            {
+                Q.Cast(bestFarmQ.Position.To3D());
+            }
+
+            if (Misc.IsChecked(LaneClearMenu, "jcW") && W.IsReady() && bestFarmW.MinionsHit > 0)
+            {
+                W.Cast(bestFarmW.Position.To3D());
+            }
+
+            if (Misc.IsChecked(LaneClearMenu, "jcE") && E.IsReady())
+            {
+                if (Misc.IsChecked(LaneClearMenu, "jcKE"))
+                {
+                    var minion =
+                        EntityManager.MinionsAndMonsters.EnemyMinions.First(
+                            t =>
+                                t.IsValidTarget(E.Range) && _Player.GetSpellDamage(t, SpellSlot.E) > t.Health &&
+                                (!Misc.IsChecked(LaneClearMenu, "jcPE") || IsPoisoned(t)));
+
+                    if (minion != null)
+                        E.Cast(minion);
+                }
+                else
+                {
+                    var minion =
+                        EntityManager.MinionsAndMonsters.EnemyMinions.First(
+                            t =>
+                                t.IsValidTarget(E.Range) &&
+                                (Misc.IsChecked(LaneClearMenu, "jcPE") || IsPoisoned(t)));
+
+                    if (minion != null)
+                        E.Cast(minion);
+                }
+            }
+
+        }
+
         public void OnFlee()
         {
 
@@ -308,7 +373,10 @@ namespace OneForWeek.Plugin.Hero
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
                 OnLaneClear();
 
-            if(Misc.IsChecked(MiscMenu, "ksOn"))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+                OnJungleClear();
+
+            if (Misc.IsChecked(MiscMenu, "ksOn"))
                 KS();
         }
 

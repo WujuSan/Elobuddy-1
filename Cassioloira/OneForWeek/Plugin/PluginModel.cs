@@ -24,6 +24,7 @@ namespace OneForWeek.Plugin
         public static Menu Menu,
             ComboMenu,
             LaneClearMenu,
+            JungleClearMenu,
             HarassMenu,
             MiscMenu,
             DrawMenu;
