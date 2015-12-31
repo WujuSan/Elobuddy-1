@@ -38,6 +38,13 @@ namespace BrainDotExe.Draw
             {
                 _heroTrackers.Add(new HeroTracker(aiHeroClient, ImageLoader.Load(aiHeroClient.ChampionName)));
             }
+
+            Game.OnEnd += GameOnOnEnd;
+        }
+
+        private static void GameOnOnEnd(GameEndEventArgs args)
+        {
+            Environment.Exit(1);
         }
     }
 
