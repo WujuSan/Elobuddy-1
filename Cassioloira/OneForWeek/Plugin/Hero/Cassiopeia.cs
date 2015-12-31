@@ -19,6 +19,8 @@ namespace OneForWeek.Plugin.Hero
         public static Spell.Targeted E;
         public static Spell.Skillshot R;
 
+        private static int skinId = 1;
+
         private float _lastECast = 0f;
 
         public void Init()
@@ -89,6 +91,7 @@ namespace OneForWeek.Plugin.Hero
             LaneClearMenu.Add("lcPE", new CheckBox("Only E if poisoned", true));
 
             MiscMenu = Menu.AddSubMenu("Misc - " + GCharname, GCharname + "Misc");
+            MiscMenu.Add("skin", new Slider("Skin Changer: ", 1, 1, 5));
             MiscMenu.Add("poisonForE", new CheckBox("Only Cast E in Poisoned targets", true));
             MiscMenu.Add("miscDelayE", new Slider("Delay E Cast by: ", 150, 0, 500));
             MiscMenu.Add("ksOn", new CheckBox("Try to KS", true));
@@ -271,6 +274,12 @@ namespace OneForWeek.Plugin.Hero
 
         public void OnGameUpdate(EventArgs args)
         {
+            if (skinId != Misc.GetSliderValue(MiscMenu, "skin"))
+            {
+                skinId = Misc.GetSliderValue(MiscMenu, "skin");
+                Player.SetSkinId(skinId);
+            }
+
             switch (Orbwalker.ActiveModesFlags)
             {
                 case Orbwalker.ActiveModes.Combo:
