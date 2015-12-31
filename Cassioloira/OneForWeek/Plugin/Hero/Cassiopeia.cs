@@ -7,6 +7,8 @@ using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
+using OneForWeek.Draw;
+using OneForWeek.Util;
 using OneForWeek.Util.Misc;
 using SharpDX;
 
@@ -26,6 +28,7 @@ namespace OneForWeek.Plugin.Hero
         public void Init()
         {
             InitVariables();
+            DamageIndicator.Initialize(Spells.GetComboDamage);
         }
 
         public void InitVariables()
@@ -56,6 +59,7 @@ namespace OneForWeek.Plugin.Hero
             DrawMenu = Menu.AddSubMenu("Draw - " + GCharname, GCharname + "Draw");
             DrawMenu.AddGroupLabel("Draw");
             DrawMenu.Add("drawDisable", new CheckBox("Turn off all drawings", true));
+            DrawMenu.Add("damageIndicator", new CheckBox("Damage Indicator", true));
             DrawMenu.Add("drawQ", new CheckBox("Draw Q Range", true));
             DrawMenu.Add("drawW", new CheckBox("Draw W Range", true));
             DrawMenu.Add("drawE", new CheckBox("Draw E Range", true));
@@ -311,7 +315,12 @@ namespace OneForWeek.Plugin.Hero
         public void OnDraw(EventArgs args)
         {
             if (Misc.IsChecked(DrawMenu, "drawDisable"))
+            {
+                DamageIndicator.Enabled = false;
                 return;
+            }
+
+            DamageIndicator.Enabled = Misc.IsChecked(DrawMenu, "damageIndicator");
 
             if (Misc.IsChecked(DrawMenu, "drawQ"))
                 Circle.Draw(Q.IsReady() ? Color.Blue : Color.Red, Q.Range, Player.Instance.Position);

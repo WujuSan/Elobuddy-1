@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Draw\DamageIndicator.cs" />
     <Compile Include="Draw\Notifications\Notification.cs" />
     <Compile Include="Model\ActionQueue\ActionQueueItem.cs" />
     <Compile Include="Model\ActionQueue\ActionQueueList.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Util\Misc\Igniter.cs" />
     <Compile Include="Util\Misc\MEC.cs" />
     <Compile Include="Util\Misc\Misc.cs" />
+    <Compile Include="Util\Spells.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
