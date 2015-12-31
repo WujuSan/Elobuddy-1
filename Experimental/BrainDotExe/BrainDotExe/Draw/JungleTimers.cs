@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using BrainDotExe.Util;
 using EloBuddy;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
+using EloBuddy.SDK.Rendering;
 using SharpDX;
 using Color = System.Drawing.Color;
 using Utility = BrainDotExe.Common.Utility;
@@ -15,17 +17,20 @@ namespace BrainDotExe.Draw
     {
         public static Menu JungleTimersMenu;
 
+        public static Text Text { get; set; }
+
         public static List<Tuple<float, Camp>> Times = new List<Tuple<float, Camp>>();
 
         public static List<Tuple<float, Vector3>> TimesHealth = new List<Tuple<float, Vector3>>();
 
         public static void Init()
         {
-
             JungleTimersMenu = Program.Menu.AddSubMenu("Jungle Timers", "jungleTimersDraw");
             JungleTimersMenu.AddGroupLabel("Jungle Timers");
             JungleTimersMenu.Add("drawTimers", new CheckBox("Show Times", true));
             JungleTimersMenu.Add("drawTimersHealth", new CheckBox("Show Times of health Howling Abyss", true));
+            JungleTimersMenu.Add("drawFontSize", new Slider("Font Size - F5 To Reload", 8, 5, 14));
+            Text = new Text("", new Font(FontFamily.GenericSansSerif, Misc.getSliderValue(JungleTimersMenu, "drawFontSize"), FontStyle.Regular)) { Color = Color.White };
 
             GameObject.OnCreate += GameObjectOnCreate;
             GameObject.OnDelete += GameObjectOnDelete;
@@ -56,9 +61,7 @@ namespace BrainDotExe.Draw
 
                         var spellString = minutes <= 0 ? seconds + "" : minutes + ":" + seconds;
 
-                        Drawing.DrawText(Drawing.WorldToMinimap(timer.Item2.Position).X - 5, Drawing.WorldToMinimap(timer.Item2.Position).Y - 5,
-                            Color.White, // infos da cor
-                            spellString); // infos do escrito
+                        Text.Draw(spellString, Color.White, new Vector2(Drawing.WorldToMinimap(timer.Item2.Position).X - 5, Drawing.WorldToMinimap(timer.Item2.Position).Y - 5));
                     }
                     else
                     {
@@ -91,9 +94,7 @@ namespace BrainDotExe.Draw
 
                         var spellString = minutes <= 0 ? seconds + "" : minutes + ":" + seconds;
 
-                        Drawing.DrawText(Drawing.WorldToMinimap(timer.Item2).X - 5, Drawing.WorldToMinimap(timer.Item2).Y - 5,
-                            Color.White, // infos da cor
-                            spellString); // infos do escrito
+                        Text.Draw(spellString, Color.White, new Vector2(Drawing.WorldToMinimap(timer.Item2).X - 5, Drawing.WorldToMinimap(timer.Item2).Y - 5));
                     }
                     else
                     {

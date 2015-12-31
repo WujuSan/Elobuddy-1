@@ -7,6 +7,7 @@ using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using System.Collections.Generic;
+using System.Drawing;
 using SharpDX;
 using Color = System.Drawing.Color;
 using Utility = BrainDotExe.Common.Utility;
@@ -16,6 +17,7 @@ namespace BrainDotExe.Draw
     class TowerUtil
     {
         public static Menu TowerUtilMenu;
+        public static Text Text { get; set; }
 
         public static AIHeroClient _Player
         {
@@ -31,6 +33,8 @@ namespace BrainDotExe.Draw
             TowerUtilMenu.Add("drawTurretLife", new CheckBox("Draw Turrets Life", false));
             TowerUtilMenu.Add("drawLifeEnemy", new CheckBox("Draw Enemy Life", false));
             TowerUtilMenu.Add("drawLifeAlly", new CheckBox("Draw Ally Life", false));
+            TowerUtilMenu.Add("drawFontSize", new Slider("Font Size - F5 To Reload", 8, 5, 14));
+            Text = new Text("", new Font(FontFamily.GenericSansSerif, Misc.getSliderValue(TowerUtilMenu, "drawFontSize"), FontStyle.Regular)) { Color = Color.White };
 
             Drawing.OnDraw += TowerUtil_OnDraw;
             Drawing.OnEndScene += TowerUtil_OnEndScene;
