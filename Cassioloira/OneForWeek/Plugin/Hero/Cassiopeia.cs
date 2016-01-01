@@ -9,6 +9,7 @@ using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using OneForWeek.Draw;
 using OneForWeek.Util;
+using OneForWeek.Util.MenuSettings;
 using OneForWeek.Util.Misc;
 using SharpDX;
 
@@ -24,6 +25,8 @@ namespace OneForWeek.Plugin.Hero
         private static int skinId = 1;
 
         private float _lastECast = 0f;
+
+        private float lastQCast = 0f;
 
         public void Init()
         {
@@ -142,9 +145,10 @@ namespace OneForWeek.Plugin.Hero
             {
                 var predictionQ = Q.GetPrediction(target);
 
-                if (predictionQ.HitChancePercent >= 75)
+                if (predictionQ.HitChancePercent >= 80)
                 {
                     Q.Cast(predictionQ.CastPosition);
+                    lastQCast = Game.Time;
                 }
             }
             else if (Misc.IsChecked(ComboMenu, "comboQ") && Q.IsReady() && target.IsValidTarget(Q.Range) &&
@@ -152,16 +156,17 @@ namespace OneForWeek.Plugin.Hero
             {
                 var predictionQ = Q.GetPrediction(target);
 
-                if (predictionQ.HitChancePercent >= 75)
+                if (predictionQ.HitChancePercent >= 80)
                 {
                     Q.Cast(predictionQ.CastPosition);
+                    lastQCast = Game.Time;
                 }
             }
 
-            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && ((!IsPoisoned(target) && !Q.IsReady()) && Misc.IsChecked(ComboMenu, "castWifQnotLand")))
+            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && ((!IsPoisoned(target) && !Q.IsReady()) && Misc.IsChecked(ComboMenu, "castWifQnotLand")) && (lastQCast - Game.Time) < -0.43f)
             {
                 var predictionW = W.GetPrediction(target);
-
+                
                 if (predictionW.HitChancePercent >= 70)
                 {
                     W.Cast(predictionW.CastPosition);
