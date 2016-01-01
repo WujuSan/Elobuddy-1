@@ -391,16 +391,16 @@ namespace OneForWeek.Plugin.Hero
             DamageIndicator.Enabled = Misc.IsChecked(DrawMenu, "damageIndicator");
 
             if (Misc.IsChecked(DrawMenu, "drawQ"))
-                Circle.Draw(Q.IsReady() ? Color.Blue : Color.Red, Q.Range, Player.Instance.Position);
+                Circle.Draw(Q.IsReady() ? Color.Gray : Color.Red, Q.Range, Player.Instance.Position);
 
             if (Misc.IsChecked(DrawMenu, "drawW"))
-                Circle.Draw(W.IsReady() ? Color.Blue : Color.Red, W.Range, Player.Instance.Position);
+                Circle.Draw(W.IsReady() ? Color.Gray : Color.Red, W.Range, Player.Instance.Position);
 
             if (Misc.IsChecked(DrawMenu, "drawE"))
-                Circle.Draw(E.IsReady() ? Color.Blue : Color.Red, E.Range, Player.Instance.Position);
+                Circle.Draw(E.IsReady() ? Color.Gray : Color.Red, E.Range, Player.Instance.Position);
 
             if (Misc.IsChecked(DrawMenu, "drawR"))
-                Circle.Draw(R.IsReady() ? Color.Blue : Color.Red, R.Range, Player.Instance.Position);
+                Circle.Draw(R.IsReady() ? Color.Gray : Color.Red, R.Range, Player.Instance.Position);
 
         }
 
