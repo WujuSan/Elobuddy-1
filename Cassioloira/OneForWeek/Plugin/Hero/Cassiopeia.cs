@@ -9,6 +9,7 @@ using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using OneForWeek.Draw;
 using OneForWeek.Util;
+using OneForWeek.Util.MenuSettings;
 using OneForWeek.Util.Misc;
 using SharpDX;
 
