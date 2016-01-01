@@ -58,12 +58,25 @@ namespace OneForWeek.Plugin.Hero
 
             DrawMenu = Menu.AddSubMenu("Draw - " + GCharname, GCharname + "Draw");
             DrawMenu.AddGroupLabel("Draw");
-            DrawMenu.Add("drawDisable", new CheckBox("Turn off all drawings", true));
-            DrawMenu.Add("damageIndicator", new CheckBox("Damage Indicator", true));
-            DrawMenu.Add("drawQ", new CheckBox("Draw Q Range", true));
-            DrawMenu.Add("drawW", new CheckBox("Draw W Range", true));
-            DrawMenu.Add("drawE", new CheckBox("Draw E Range", true));
-            DrawMenu.Add("drawR", new CheckBox("Draw R Range", true));
+            DrawMenu.Add("drawReady", new CheckBox("Draw Only If The Spells Are Ready.", false));
+            DrawMenu.Add("drawDisable", new CheckBox("Turn off all drawings"));
+            DrawMenu.AddSeparator();
+            //Q
+            DrawMenu.Add("drawQ", new CheckBox("Draw Q"));
+            DrawMenu.AddColorItem("colorQ");
+            DrawMenu.AddWidthItem("widthQ");
+            //W
+            DrawMenu.Add("drawW", new CheckBox("Draw W"));
+            DrawMenu.AddColorItem("colorW");
+            DrawMenu.AddWidthItem("widthW");
+            //E
+            DrawMenu.Add("drawE", new CheckBox("Draw E"));
+            DrawMenu.AddColorItem("colorE");
+            DrawMenu.AddWidthItem("widthE");
+            //R
+            DrawMenu.Add("drawR", new CheckBox("Draw R"));
+            DrawMenu.AddColorItem("colorR");
+            DrawMenu.AddWidthItem("widthR");
 
             ComboMenu = Menu.AddSubMenu("Combo - " + GCharname, GCharname + "Combo");
             ComboMenu.AddGroupLabel("Combo");
@@ -382,26 +395,27 @@ namespace OneForWeek.Plugin.Hero
 
         public void OnDraw(EventArgs args)
         {
-            if (Misc.IsChecked(DrawMenu, "drawDisable"))
+            if (Misc.IsChecked(DrawMenu, "drawDisable")) return;
+
+            if (Misc.IsChecked(DrawMenu, "drawReady") ? Q.IsReady() : Misc.IsChecked(DrawMenu, "drawQ"))
             {
-                DamageIndicator.Enabled = false;
-                return;
+                new Circle { Color = DrawMenu.GetColor("colorQ"), BorderWidth = DrawMenu.GetWidth("widthQ"), Radius = Q.Range }.Draw(Player.Instance.Position);
             }
 
-            DamageIndicator.Enabled = Misc.IsChecked(DrawMenu, "damageIndicator");
+            if (Misc.IsChecked(DrawMenu, "drawReady") ? W.IsReady() : Misc.IsChecked(DrawMenu, "drawW"))
+            {
+                new Circle { Color = DrawMenu.GetColor("colorW"), BorderWidth = DrawMenu.GetWidth("widthW"), Radius = W.Range }.Draw(Player.Instance.Position);
+            }
 
-            if (Misc.IsChecked(DrawMenu, "drawQ"))
-                Circle.Draw(Q.IsReady() ? Color.Gray : Color.Red, Q.Range, Player.Instance.Position);
+            if (Misc.IsChecked(DrawMenu, "drawReady") ? E.IsReady() : Misc.IsChecked(DrawMenu, "drawE"))
+            {
+                new Circle { Color = DrawMenu.GetColor("colorE"), BorderWidth = DrawMenu.GetWidth("widthE"), Radius = E.Range }.Draw(Player.Instance.Position);
+            }
 
-            if (Misc.IsChecked(DrawMenu, "drawW"))
-                Circle.Draw(W.IsReady() ? Color.Gray : Color.Red, W.Range, Player.Instance.Position);
-
-            if (Misc.IsChecked(DrawMenu, "drawE"))
-                Circle.Draw(E.IsReady() ? Color.Gray : Color.Red, E.Range, Player.Instance.Position);
-
-            if (Misc.IsChecked(DrawMenu, "drawR"))
-                Circle.Draw(R.IsReady() ? Color.Gray : Color.Red, R.Range, Player.Instance.Position);
-
+            if (Misc.IsChecked(DrawMenu, "drawReady") ? R.IsReady() : Misc.IsChecked(DrawMenu, "drawR"))
+            {
+                new Circle { Color = DrawMenu.GetColor("colorR"), BorderWidth = DrawMenu.GetWidth("widthR"), Radius = R.Range }.Draw(Player.Instance.Position);
+            }
         }
 
         public void OnAfterAttack(AttackableUnit target, EventArgs args)
