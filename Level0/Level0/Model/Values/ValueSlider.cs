@@ -1,4 +1,7 @@
-﻿namespace LevelZero.Model.Values
+﻿using System;
+using LevelZero.Model.Enuns;
+
+namespace LevelZero.Model.Values
 {
     class ValueSlider : ValueAbstract
     {
@@ -6,11 +9,14 @@
         public int MaxValue { get; set; }
         public int MinValue { get; set; }
 
-        public ValueSlider(int maxValue, int minValue, int initialValue = 0)
+        public ValueSlider(int maxValue, int minValue, int initialValue, string indentifier, string displayName)
         {
+            DisplayName = displayName;
+            Identifier = indentifier;
             InitialValue = initialValue;
             MaxValue = maxValue;
             MinValue = minValue;
+            EnumMenuStyle = EnumMenuStyle.Slider;
         }
     }
 }

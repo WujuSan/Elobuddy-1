@@ -44,11 +44,8 @@ namespace LevelZero.Model
                 switch (valueAbstract.EnumMenuStyle)
                 {
                     case EnumMenuStyle.Slider:
-                        MenuValueStyleList.Find(x => x.Identifier == valueAbstract.Identifier).CurrentValue =
-                            ((ValueSlider) valueAbstract).InitialValue;
-                        var currentMenuFeatureAxuSlider = FeatureMenu.Add(NameFeature + "." + valueAbstract.Identifier,
-                            new Slider(valueAbstract.DisplayName, ((ValueSlider) valueAbstract).InitialValue,
-                                ((ValueSlider) valueAbstract).MinValue, ((ValueSlider) valueAbstract).MaxValue));
+                        MenuValueStyleList.Find(x => x.Identifier == valueAbstract.Identifier).CurrentValue = ((ValueSlider) valueAbstract).InitialValue;
+                        var currentMenuFeatureAxuSlider = FeatureMenu.Add(NameFeature + "." + valueAbstract.Identifier, new Slider(valueAbstract.DisplayName, ((ValueSlider) valueAbstract).InitialValue, ((ValueSlider) valueAbstract).MinValue, ((ValueSlider) valueAbstract).MaxValue));
                         currentMenuFeatureAxuSlider.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
                             {
                                 MenuValueStyleList.Find(x => x.Identifier == valueAbstract.Identifier).CurrentValue
@@ -79,10 +76,26 @@ namespace LevelZero.Model
             return new JavaScriptSerializer().Serialize(this);
         }
 
+        /*
+            Yeah i know that's shitty code but conditional expression don't work with EB e.e
+            (return foundObject?.CurrentValue;)
+        */
         public object Find(string identifier)
         {
             var foundObject = MenuValueStyleList.FirstOrDefault(o => o.Identifier == identifier);
             return foundObject != null ? foundObject.CurrentValue : null;
+        }
+
+        public bool IsChecked(string identifier)
+        {
+            var foundObject = MenuValueStyleList.FirstOrDefault(o => o.Identifier == identifier);
+            return foundObject != null ? (bool)foundObject.CurrentValue : false;
+        }
+
+        public int SliderValue(string identifier)
+        {
+            var foundObject = MenuValueStyleList.FirstOrDefault(o => o.Identifier == identifier);
+            return foundObject != null ? (int)foundObject.CurrentValue : 0;
         }
     }
 }

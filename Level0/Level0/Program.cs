@@ -7,13 +7,13 @@ using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using LevelZero.Model;
 using LevelZero.Model.Values;
+using LevelZero.Util;
+using SharpDX;
 
 namespace LevelZero
 {
     class Program
     {
-        private static Feature _drawFeature;
-
         static void Main(string[] args)
         {
             Loading.OnLoadingComplete += GameLoaded;
@@ -21,41 +21,21 @@ namespace LevelZero
 
         private static void GameLoaded(EventArgs args)
         {
-            Console.WriteLine("Version 1.3");
-
-            var feature = new Feature {NameFeature = "Draw"};
-            var MenuValueStyleList = new List<ValueAbstract>
+            try
             {
-                new ValueCheckbox(false, "disable", "Disable"),
-                new ValueCheckbox(false, "draw.q", "Draw Q"),
-                new ValueCheckbox(false, "draw.w", "Draw W"),
-                new ValueCheckbox(false, "draw.e", "Draw E"),
-                new ValueCheckbox(false, "draw.r", "Draw R")
-            };
+                var handle = Activator.CreateInstance(null, "LevelZero.Core.Champions." + Player.Instance.ChampionName);
+                var pluginModel = (PluginModel)handle.Unwrap();
+                NotificationUtil.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, ObjectManager.Player.ChampionName + " Loaded !", Color.DeepSkyBlue));
 
-            feature.MenuValueStyleList = MenuValueStyleList;
-
-            string path = @"c:\temp\drawFeature.txt";
-            if (!File.Exists(path))
-            {
-                using (StreamWriter sw = File.CreateText(path))
-                {
-                    sw.WriteLine(feature.ToJson());
-                }
+                /*
+                    Anyone wants your name here ?
+                */
+                NotificationUtil.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, "Addon by: MrArticuno", Color.White));
             }
-
-            feature.ToMenu();
-
-            _drawFeature = feature;
-
-            Game.OnTick += Ontick;
-        }
-
-        private static void Ontick(EventArgs args)
-        {
-            if ((bool) _drawFeature.Find("disable"))
+            catch (Exception ex)
             {
-                Console.WriteLine("Opa");
+                Console.WriteLine(ex.StackTrace);
+                NotificationUtil.DrawNotification(new NotificationModel(Game.Time, 20f, 1f, ObjectManager.Player.ChampionName + " is Not Supported", Color.Red));
             }
         }
     }

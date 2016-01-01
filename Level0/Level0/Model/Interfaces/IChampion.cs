@@ -13,6 +13,7 @@ namespace LevelZero.Model.Interfaces
         void OnCombo();
         void OnHarass();
         void OnLaneClear();
+        void OnJungleClear();
         void OnLastHit();
         void OnFlee();
         void OnUpdate(EventArgs args);
@@ -21,6 +22,7 @@ namespace LevelZero.Model.Interfaces
         void OnPossibleToInterrupt(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs interruptableSpellEventArgs);
         void OnGapCloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e);
         void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args);
+        void OnPlayerLevelUp(Obj_AI_Base sender, Obj_AI_BaseLevelUpEventArgs args);
         void GameObjectOnCreate(GameObject sender, EventArgs args);
         void GameObjectOnDelete(GameObject sender, EventArgs args);
     }

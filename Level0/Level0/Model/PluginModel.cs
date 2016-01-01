@@ -7,23 +7,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static EloBuddy.SDK.Spell;
 using EloBuddy.SDK.Events;
 
 namespace LevelZero.Model
 {
     abstract class PluginModel : IChampion
     {
-        public static List<SpellBase> Spells { get; set; }
+        public static List<Spell.SpellBase> Spells { get; set; }
         public static List<Feature> Features { get; set; }
 
-        public PluginModel()
+        protected PluginModel()
         {
-            Spells = new List<SpellBase>();
+            Spells = new List<Spell.SpellBase>();
             Features = new List<Feature>();
+            Init();
         }
 
-        public SpellBase findSpell(SpellSlot spellSlot)
+        public Spell.SpellBase findSpell(SpellSlot spellSlot)
         {
             var spell = Spells.Find(s => s.Slot == spellSlot);
 
@@ -32,7 +32,6 @@ namespace LevelZero.Model
 
         public virtual void Init()
         {
-            throw new NotImplementedException();
         }
 
         public virtual void InitVariables()
@@ -47,37 +46,47 @@ namespace LevelZero.Model
 
         public virtual void InitEvents()
         {
-            throw new NotImplementedException();
+            Game.OnTick += OnUpdate;
+            Obj_AI_Base.OnLevelUp += OnPlayerLevelUp;
+        }
+
+        public virtual void OnPlayerLevelUp(Obj_AI_Base sender, Obj_AI_BaseLevelUpEventArgs args)
+        {
+            if (!sender.IsMe) return;
         }
 
         public virtual void OnCombo()
         {
-            throw new NotImplementedException();
         }
 
         public virtual void OnHarass()
         {
-            throw new NotImplementedException();
         }
 
         public virtual void OnLaneClear()
         {
-            throw new NotImplementedException();
+        }
+
+        public virtual void OnJungleClear()
+        {
         }
 
         public virtual void OnLastHit()
         {
-            throw new NotImplementedException();
         }
 
         public virtual void OnFlee()
         {
-            throw new NotImplementedException();
         }
 
         public virtual void OnUpdate(EventArgs args)
         {
-            throw new NotImplementedException();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) OnCombo();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)) OnHarass();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) OnLaneClear();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit)) OnLastHit();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee)) OnFlee();
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) OnJungleClear();
         }
 
         public virtual void OnDraw(EventArgs args)
@@ -97,7 +106,7 @@ namespace LevelZero.Model
 
         public virtual void OnGapCloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            throw new NotImplementedException();
+            if(sender.IsAlly) return;
         }
 
         public virtual void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

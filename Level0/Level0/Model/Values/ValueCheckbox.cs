@@ -1,4 +1,6 @@
-﻿namespace LevelZero.Model.Values
+﻿using LevelZero.Model.Enuns;
+
+namespace LevelZero.Model.Values
 {
     class ValueCheckbox : ValueAbstract
     {
@@ -9,6 +11,7 @@
             Identifier = identifier;
             DisplayName = displayName;
             InitialValue = initialValue;
+            EnumMenuStyle = EnumMenuStyle.Checkbox;
         }
     }
 }

@@ -58,26 +58,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\DamageIndicator.cs" />
+    <Compile Include="Controller\ItemController.cs" />
     <Compile Include="Core\Champions\Tristana.cs" />
     <Compile Include="Model\Enuns\EnumMenuStyle.cs" />
     <Compile Include="Model\Feature.cs" />
     <Compile Include="Model\Globals.cs" />
     <Compile Include="Model\Interfaces\IChampion.cs" />
     <Compile Include="Model\PluginModel.cs" />
+    <Compile Include="Model\SpellDamage.cs" />
     <Compile Include="Model\Values\ValueAbstract.cs" />
     <Compile Include="Model\Values\ValueCheckbox.cs" />
     <Compile Include="Model\Values\ValueSlider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Util\DamageUtil.cs" />
     <Compile Include="Util\MathUtil.cs" />
+    <Compile Include="Util\NotificationUtil.cs" />
+    <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Util\PredictionUtil.cs" />
+    <Compile Include="Util\ItemUtil.cs" />
     <Compile Include="Util\TargetUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controller\" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notification.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

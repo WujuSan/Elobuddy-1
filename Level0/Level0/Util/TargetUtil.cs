@@ -19,32 +19,17 @@ namespace LevelZero.Util
 
         public static bool IsValidTargetUtil(this Obj_AI_Base target)
         {
-            foreach (var buff in invalidTargetBuffs)
-            {
-                if (target.HasBuff(buff))
-                {
-                    return false;
-                }
-            }
-            return true;
+            return invalidTargetBuffs.All(buff => !target.HasBuff(buff));
         }
 
         public static bool IsValidTargetUtil(this Obj_AI_Base target, float range)
         {
-            foreach (var buff in invalidTargetBuffs)
-            {
-                if (target.HasBuff(buff))
-                {
-                    return false;
-                }
-            }
-
-            if (Player.Instance.Distance(target) > range)
+            if (invalidTargetBuffs.Any(target.HasBuff))
             {
                 return false;
             }
 
-            return true;
+            return !(Player.Instance.Distance(target) > range);
         }
 
     }
