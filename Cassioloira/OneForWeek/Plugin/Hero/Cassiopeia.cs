@@ -145,7 +145,7 @@ namespace OneForWeek.Plugin.Hero
                 }
             }
 
-            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && ((!IsPoisoned(target) || !Q.IsReady()) && Misc.IsChecked(ComboMenu, "castWifQnotLand")))
+            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && ((!IsPoisoned(target) && !Q.IsReady()) && Misc.IsChecked(ComboMenu, "castWifQnotLand")))
             {
                 var predictionW = W.GetPrediction(target);
 
