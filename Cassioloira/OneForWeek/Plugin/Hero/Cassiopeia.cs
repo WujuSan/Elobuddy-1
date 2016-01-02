@@ -151,25 +151,30 @@ namespace OneForWeek.Plugin.Hero
                     lastQCast = Game.Time;
                 }
             }
-            else if (Misc.IsChecked(ComboMenu, "comboQ") && Q.IsReady() && target.IsValidTarget(Q.Range) &&
-                     IsPoisoned(target))
-            {
-                var predictionQ = Q.GetPrediction(target);
 
-                if (predictionQ.HitChancePercent >= 80)
+            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range))
+            {
+                if (Misc.IsChecked(ComboMenu, "castWifQnotLand"))
                 {
-                    Q.Cast(predictionQ.CastPosition);
-                    lastQCast = Game.Time;
+                    if ((!IsPoisoned(target) && !Q.IsReady()) &&
+                        (lastQCast - Game.Time) < -0.43f)
+                    {
+                        var predictionW = W.GetPrediction(target);
+
+                        if (predictionW.HitChancePercent >= 70)
+                        {
+                            W.Cast(predictionW.CastPosition);
+                        }
+                    }
                 }
-            }
-
-            if (Misc.IsChecked(ComboMenu, "comboW") && W.IsReady() && target.IsValidTarget(W.Range) && ((!IsPoisoned(target) && !Q.IsReady()) && Misc.IsChecked(ComboMenu, "castWifQnotLand")) && (lastQCast - Game.Time) < -0.43f)
-            {
-                var predictionW = W.GetPrediction(target);
-                
-                if (predictionW.HitChancePercent >= 70)
+                else
                 {
-                    W.Cast(predictionW.CastPosition);
+                    var predictionW = W.GetPrediction(target);
+
+                    if (predictionW.HitChancePercent >= 70)
+                    {
+                        W.Cast(predictionW.CastPosition);
+                    }
                 }
             }
 
