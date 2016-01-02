@@ -303,7 +303,7 @@ namespace OneForWeek.Plugin.Hero
         {
             var minions = EntityManager.MinionsAndMonsters.Monsters;
 
-            if (minions == null || !minions.Any()) return;
+            if (minions == null || !minions.Any(m => m.IsValidTarget(900))) return;
 
             var bestFarmQ =
                 Misc.GetBestCircularFarmLocation(
@@ -316,25 +316,25 @@ namespace OneForWeek.Plugin.Hero
                         .Select(xm => xm.ServerPosition.To2D())
                         .ToList(), W.Width, W.Range);
 
-            if (Misc.IsChecked(LaneClearMenu, "jcQ") && Q.IsReady() && bestFarmQ.MinionsHit > 0)
+            if (Misc.IsChecked(JungleClearMenu, "jcQ") && Q.IsReady() && bestFarmQ.MinionsHit > 0)
             {
                 Q.Cast(bestFarmQ.Position.To3D());
             }
 
-            if (Misc.IsChecked(LaneClearMenu, "jcW") && W.IsReady() && bestFarmW.MinionsHit > 0)
+            if (Misc.IsChecked(JungleClearMenu, "jcW") && W.IsReady() && bestFarmW.MinionsHit > 0)
             {
                 W.Cast(bestFarmW.Position.To3D());
             }
 
-            if (Misc.IsChecked(LaneClearMenu, "jcE") && E.IsReady())
+            if (Misc.IsChecked(JungleClearMenu, "jcE") && E.IsReady())
             {
-                if (Misc.IsChecked(LaneClearMenu, "jcKE"))
+                if (Misc.IsChecked(JungleClearMenu, "jcKE"))
                 {
                     var minion =
                         EntityManager.MinionsAndMonsters.EnemyMinions.First(
                             t =>
                                 t.IsValidTarget(E.Range) && _Player.GetSpellDamage(t, SpellSlot.E) > t.Health &&
-                                (!Misc.IsChecked(LaneClearMenu, "jcPE") || IsPoisoned(t)));
+                                (!Misc.IsChecked(JungleClearMenu, "jcPE") || IsPoisoned(t)));
 
                     if (minion != null)
                         E.Cast(minion);
@@ -345,7 +345,7 @@ namespace OneForWeek.Plugin.Hero
                         EntityManager.MinionsAndMonsters.EnemyMinions.First(
                             t =>
                                 t.IsValidTarget(E.Range) &&
-                                (Misc.IsChecked(LaneClearMenu, "jcPE") || IsPoisoned(t)));
+                                (Misc.IsChecked(JungleClearMenu, "jcPE") || IsPoisoned(t)));
 
                     if (minion != null)
                         E.Cast(minion);
