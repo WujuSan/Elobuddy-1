@@ -79,8 +79,8 @@
     </Compile>
     <Compile Include="Util\DamageUtil.cs" />
     <Compile Include="Util\MathUtil.cs" />
-    <Compile Include="Util\NotificationUtil.cs" />
     <Compile Include="Model\NotificationModel.cs" />
+    <Compile Include="Util\NotificationUtil.cs" />
     <Compile Include="Util\PredictionUtil.cs" />
     <Compile Include="Util\ItemUtil.cs" />
     <Compile Include="Util\TargetUtil.cs" />

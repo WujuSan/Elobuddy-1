@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
+using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Rendering;
 using LevelZero.Controller;
 using LevelZero.Util;
@@ -26,6 +27,7 @@ namespace LevelZero.Core.Champions
         {
             base.InitEvents();
             Drawing.OnDraw += OnDraw;
+
         }
 
         public override void InitVariables()
@@ -72,7 +74,7 @@ namespace LevelZero.Core.Champions
                 MenuValueStyleList = new List<ValueAbstract>
                 {
                     new ValueCheckbox(true,  "combo.q", "Combo Q"),
-                    new ValueCheckbox(true, "combo.w", "Combo W"),
+                    new ValueCheckbox(true,  "combo.w", "Combo W"),
                     new ValueCheckbox(true,  "combo.e", "Combo E"),
                     new ValueCheckbox(true,  "combo.r", "Combo R")
                 }
@@ -235,8 +237,8 @@ namespace LevelZero.Core.Champions
 
             if (combo.IsChecked("combo.w") && Spells[1].IsReady() && Spells[1].IsInRange(target) && !Player.Instance.IsInAutoAttackRange(target))
             {
-                //Check if target is killable with two AA
-                if (Player.Instance.GetAutoAttackDamage(target) * 2 > target.Health)
+                //Check if target is killable with one AA
+                if (Player.Instance.GetAutoAttackDamage(target) * 1 > target.Health)
                 {
                     Player.CastSpell(Spells[1].Slot, target.ServerPosition);
                 }

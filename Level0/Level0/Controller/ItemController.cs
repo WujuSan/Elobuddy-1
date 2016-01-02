@@ -10,7 +10,6 @@ namespace LevelZero.Controller
 {
     class ItemController
     {
-
         #region Offensive Itens
 
         public bool CastTiamatHydra()
