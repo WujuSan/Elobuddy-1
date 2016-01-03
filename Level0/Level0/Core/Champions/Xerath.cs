@@ -475,5 +475,47 @@ namespace LevelZero.Core.Champions
 
             Spells[3].Range = (uint) (2000 + (Spells[3].Level * 1200));
         }
+
+        public override void OnUpdate(EventArgs args)
+        {
+            if (Features.Find(f => f.NameFeature == "Misc").IsChecked("misc.tapToUlt"))
+            {
+                var target = TargetSelector.GetTarget(Spells[3].Range, DamageType.Magical);
+
+                if (target == null || !target.IsValidTarget()) return;
+
+                var R = ((Spell.Skillshot) Spells[3]);
+
+                if (R.IsReady() && R.IsInRange(target) || castingR)
+                {
+                    var predictionR = R.GetPrediction(target);
+
+                    if (predictionR.HitChancePercent >= 80)
+                    {
+                        if (!castingR)
+                        {
+                            castingR = true;
+                            Orbwalker.DisableMovement = true;
+                            Orbwalker.DisableAttacking = true;
+                        }
+
+                        R.Cast();
+
+                    }
+                    else if (castingR && predictionR.HitChancePercent >= 70)
+                    {
+                        R.Cast(predictionR.CastPosition);
+                    }
+                }
+                else if (!R.IsReady())
+                {
+                    castingR = false;
+                    Orbwalker.DisableMovement = false;
+                    Orbwalker.DisableAttacking = false;
+                }
+            }
+
+            base.OnUpdate(args);
+        }
     }
 }
