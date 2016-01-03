@@ -67,6 +67,7 @@ namespace LevelZero.Core.Champions
                     new ValueCheckbox(false, "disable", "Disable"),
                     new ValueCheckbox(true, "dmgIndicator", "Show Damage Indicator"),
                     new ValueCheckbox(false, "draw.q", "Draw Q"),
+                    new ValueCheckbox(false, "draw.qEx", "Draw Q Extended"),
                     new ValueCheckbox(false, "draw.w", "Draw W"),
                     new ValueCheckbox(false, "draw.e", "Draw E"),
                     new ValueCheckbox(false, "draw.r", "Draw R")
@@ -163,6 +164,9 @@ namespace LevelZero.Core.Champions
 
             if (draw.IsChecked("draw.q"))
                 Circle.Draw(Spells[0].IsReady() ? Color.Blue : Color.Red, Spells[0].Range, Player.Instance.Position);
+
+            if (draw.IsChecked("draw.qEx"))
+                Circle.Draw(Spells[0].IsReady() ? Color.Blue : Color.Red, ((Spell.Chargeable)Spells[0]).MaximumRange, Player.Instance.Position);
 
             if (draw.IsChecked("draw.w"))
                 Circle.Draw(Spells[1].IsReady() ? Color.Blue : Color.Red, Spells[1].Range, Player.Instance.Position);
