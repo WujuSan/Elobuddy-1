@@ -97,9 +97,6 @@ namespace LevelZero.Core.Champions
             feature.ToMenu();
             Features.Add(feature);
 
-            feature.ToMenu();
-            Features.Add(feature);
-
             feature = new Feature
             {
                 NameFeature = "Harass",

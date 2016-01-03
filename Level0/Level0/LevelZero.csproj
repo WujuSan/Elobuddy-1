@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Controller\DamageIndicator.cs" />
     <Compile Include="Controller\ItemController.cs" />
+    <Compile Include="Core\Champions\Xerath.cs" />
     <Compile Include="Core\Champions\Tristana.cs" />
     <Compile Include="Model\Enuns\EnumMenuStyle.cs" />
     <Compile Include="Model\Feature.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Model\PluginModel.cs" />
     <Compile Include="Model\SpellDamage.cs" />
     <Compile Include="Model\Values\ValueAbstract.cs" />
+    <Compile Include="Model\Values\ValueKeybind.cs" />
     <Compile Include="Model\Values\ValueCheckbox.cs" />
     <Compile Include="Model\Values\ValueSlider.cs" />
     <Compile Include="Program.cs" />
