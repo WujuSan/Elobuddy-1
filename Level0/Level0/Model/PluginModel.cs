@@ -46,7 +46,7 @@ namespace LevelZero.Model
 
         public virtual void InitEvents()
         {
-            Game.OnTick += OnUpdate;
+            Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnLevelUp += OnPlayerLevelUp;
         }
 

@@ -34,14 +34,13 @@ namespace LevelZero.Core.Champions
         {
             base.InitEvents();
             Drawing.OnDraw += OnDraw;
-
         }
 
         public override void InitVariables()
         {
             Spells = new List<Spell.SpellBase>
             {
-                new Spell.Chargeable(SpellSlot.Q, 750, 1550, 1500, 500, int.MaxValue, 100) { AllowedCollisionCount = int.MaxValue },
+                new Spell.Chargeable(SpellSlot.Q, 750, 1550, 1500, 750, int.MaxValue, 100) { AllowedCollisionCount = int.MaxValue },
                 new Spell.Skillshot(SpellSlot.W, 1100, SkillShotType.Circular, 750, int.MaxValue, 150) { AllowedCollisionCount = int.MaxValue },
                 new Spell.Skillshot(SpellSlot.E, 1050, SkillShotType.Linear, 250, 1100, 60),
                 new Spell.Skillshot(SpellSlot.R, (uint) (2000 + (Player.GetSpell(SpellSlot.R).Level * 1200)), SkillShotType.Circular, 500, int.MaxValue, 120) { AllowedCollisionCount = int.MaxValue }
@@ -53,8 +52,10 @@ namespace LevelZero.Core.Champions
                 new SpellDamage(Spells[2], new float[]{ 0, 80 , 110 , 140 , 170 , 200 }, new [] { 0, 0.45f, 0.45f, 0.45f, 0.45f, 0.45f }, DamageType.Magical),
                 new SpellDamage(Spells[3], new float[]{ 0, 190 * 3 , 245 * 3, 300 * 3 }, new [] { 0, 0.433f, 0.433f, 0.433f }, DamageType.Magical)
             };
+
             InitMenu();
             DamageIndicator.Initialize(DamageUtil.GetComboDamage);
+            new SkinController(4);
         }
 
         public override void InitMenu()
@@ -144,7 +145,7 @@ namespace LevelZero.Core.Champions
                 {
                     new ValueKeybind(false, "misc.tapToUlt", "Tap to Cast Utl"),
                     new ValueCheckbox(true,  "misc.antiGapE", "E on gap closers"),
-                    new ValueSlider(100, 0 , 40, "misc.antiGapE.antigap", "Minimum HP % to cast R")
+                    new ValueSlider(100, 0 , 40, "misc.antiGapE.antigap", "Anti-Gap Minimum HP % to cast E")
                 }
             };
 
@@ -190,9 +191,10 @@ namespace LevelZero.Core.Champions
 
         public override void OnCombo()
         {
-            var target = TargetSelector.GetTarget(Spells[3].Range, DamageType.Magical);
+            var target = TargetSelector.GetTarget(((Spell.Chargeable) Spells[0]).MaximumRange, DamageType.Magical);
+            var rTarget = TargetSelector.GetTarget(Spells[3].Range, DamageType.Magical);
 
-            if(target == null || !target.IsValidTarget()) return;
+            if (target == null || !target.IsValidTarget()) return;
 
             var combo = Features.Find(f => f.NameFeature == "Combo");
             var Q = ((Spell.Chargeable) Spells[0]);
@@ -215,11 +217,11 @@ namespace LevelZero.Core.Champions
                 else
                 {
                     var qPrediction = Q.GetPrediction(target);
-                    var predictionPost = Prediction.Position.PredictUnitPosition(target, 300);
+                    var predictionPost = Prediction.Position.PredictUnitPosition(target, 410);
 
                     if(predictionPost.Distance(Player.Instance) > Q.Range && Q.IsCharging) return;
 
-                    if (qPrediction.HitChancePercent >= 85)
+                    if (qPrediction.HitChancePercent >= 87)
                     {
                         Q.Cast(qPrediction.CastPosition);
                     }
@@ -231,9 +233,9 @@ namespace LevelZero.Core.Champions
                 return;
             }
 
-            if (combo.IsChecked("combo.r") && R.IsReady() && R.IsInRange(target) && ((!Q.IsInRange(target) && DamageUtil.Killable(target, SpellSlot.R, 50)) || castingR))
+            if (combo.IsChecked("combo.r") && R.IsReady() && R.IsInRange(rTarget) && ((!Q.IsInRange(rTarget) && DamageUtil.Killable(rTarget, SpellSlot.R, 50)) || castingR))
             {
-                var predictionR = R.GetPrediction(target);
+                var predictionR = R.GetPrediction(rTarget);
 
                 if (predictionR.HitChancePercent >= 80)
                 {
@@ -272,7 +274,7 @@ namespace LevelZero.Core.Champions
             {
                 var predictionE = E.GetPrediction(target);
 
-                if (predictionE.HitChancePercent >= 85)
+                if (predictionE.HitChancePercent >= 80)
                 {
                     E.Cast(predictionE.CastPosition);
                 }
@@ -306,7 +308,7 @@ namespace LevelZero.Core.Champions
                 else
                 {
                     var qPrediction = Q.GetPrediction(target);
-                    var predictionPost = Prediction.Position.PredictUnitPosition(target, 300);
+                    var predictionPost = Prediction.Position.PredictUnitPosition(target, 350);
 
                     if (predictionPost.Distance(Player.Instance) > Q.Range && Q.IsCharging) return;
 
@@ -371,9 +373,8 @@ namespace LevelZero.Core.Champions
                 }
                 else
                 {
-                    if (bestFarmPostion.Position.Distance(Player.Instance) > Q.Range && Q.IsCharging) return;
-
-                    Q.Cast(bestFarmPostion.Position.To3D());
+                    if (bestFarmPostion.Position.Distance(Player.Instance) < Q.Range)
+                        Q.Cast(bestFarmPostion.Position.To3D());
                 }
             }
 
@@ -517,7 +518,7 @@ namespace LevelZero.Core.Champions
                 }
             }
 
-            if (!Spells[3].IsReady())
+            if (!Spells[3].IsReady() && castingR)
             {
                 castingR = false;
                 Orbwalker.DisableMovement = false;

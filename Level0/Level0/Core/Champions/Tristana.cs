@@ -48,6 +48,7 @@ namespace LevelZero.Core.Champions
             };
             InitMenu();
             DamageIndicator.Initialize(DamageUtil.GetComboDamage);
+            new SkinController(7);
         }
 
         public override void InitMenu()
@@ -93,6 +94,8 @@ namespace LevelZero.Core.Champions
                     new ValueSlider(200, 0 , 50, "combo.misc.rCorrection", "Damage Correction of R")
                 }
             };
+
+            
 
             feature.ToMenu();
             Features.Add(feature);
@@ -291,7 +294,7 @@ namespace LevelZero.Core.Champions
                 }
             }
 
-            if (laneclear.IsChecked("laneclear.q") && Spells[0].IsReady() && Player.Instance.IsInAutoAttackRange(target) && (!laneclear.IsChecked("laneclear.e") || !Spells[2].IsReady()))
+            if (laneclear.IsChecked("laneclear.q") && Spells[0].IsReady() && Player.Instance.IsInAutoAttackRange(target))
             {
                 Spells[0].Cast();
             }
@@ -327,7 +330,7 @@ namespace LevelZero.Core.Champions
                 }
             }
 
-            if (jungleclear.IsChecked("jungleclear.q") && Spells[0].IsReady() && Player.Instance.IsInAutoAttackRange(target) && (!jungleclear.IsChecked("jungleclear.e") || !Spells[2].IsReady()))
+            if (jungleclear.IsChecked("jungleclear.q") && Spells[0].IsReady() && Player.Instance.IsInAutoAttackRange(target))
             {
                 Spells[0].Cast();
             }
