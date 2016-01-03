@@ -279,9 +279,10 @@ namespace LevelZero.Core.Champions
         {
             var target = TargetSelector.GetTarget(1550, DamageType.Magical);
 
-            if (target == null || !target.IsValidTarget()) return;
-
             var harass = Features.Find(f => f.NameFeature == "Harass");
+
+            if (target == null || !target.IsValidTarget(1000) || harass.SliderValue("harass.mana") > Player.Instance.ManaPercent) return;
+            
             var Q = ((Spell.Chargeable)Spells[0]);
             var W = ((Spell.Skillshot)Spells[1]);
             var E = ((Spell.Skillshot)Spells[2]);
@@ -343,9 +344,9 @@ namespace LevelZero.Core.Champions
         {
             var minions = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsValidTarget(1000));
 
-            if (minions == null || !minions.Any(t => t.IsValidTarget(1000))) return;
-
             var laneclear = Features.Find(f => f.NameFeature == "Lane Clear");
+
+            if (minions == null || !minions.Any(t => t.IsValidTarget(1000)) || laneclear.SliderValue("laneclear.mana") > Player.Instance.ManaPercent) return;
 
             var Q = ((Spell.Chargeable)Spells[0]);
             var W = ((Spell.Skillshot)Spells[1]);
@@ -404,9 +405,9 @@ namespace LevelZero.Core.Champions
         {
             var minions = EntityManager.MinionsAndMonsters.Monsters.Where(t => t.IsValidTarget(1000));
 
-            if (minions == null || !minions.Any(t => t.IsValidTarget(1000))) return;
-
             var jungleclear = Features.Find(f => f.NameFeature == "Jungle Clear");
+
+            if (minions == null || !minions.Any(t => t.IsValidTarget(1000)) || jungleclear.SliderValue("jungleclear.mana") > Player.Instance.ManaPercent) return;
 
             var Q = ((Spell.Chargeable)Spells[0]);
             var W = ((Spell.Skillshot)Spells[1]);
