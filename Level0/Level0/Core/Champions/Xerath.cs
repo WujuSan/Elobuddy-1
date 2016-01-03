@@ -96,6 +96,7 @@ namespace LevelZero.Core.Champions
                 NameFeature = "Harass",
                 MenuValueStyleList = new List<ValueAbstract>
                 {
+                    new ValueSlider(100, 0 , 50, "harass.mana", "Minimum mana %"),
                     new ValueCheckbox(true,  "harass.q", "Harass Q"),
                     new ValueCheckbox(true,  "harass.w", "Harass W"),
                     new ValueCheckbox(true,  "harass.e", "Harass E")
@@ -110,6 +111,7 @@ namespace LevelZero.Core.Champions
                 NameFeature = "Lane Clear",
                 MenuValueStyleList = new List<ValueAbstract>
                 {
+                    new ValueSlider(100, 0 , 50, "laneclear.mana", "Minimum mana %"),
                     new ValueCheckbox(true,  "laneclear.q", "Lane Clear Q"),
                     new ValueCheckbox(true,  "laneclear.w", "Lane Clear W"),
                     new ValueCheckbox(false, "laneclear.e", "Lane Clear E")
@@ -124,6 +126,7 @@ namespace LevelZero.Core.Champions
                 NameFeature = "Jungle Clear",
                 MenuValueStyleList = new List<ValueAbstract>
                 {
+                    new ValueSlider(100, 0 , 50, "jungleclear.mana", "Minimum mana %"),
                     new ValueCheckbox(true,  "jungleclear.q", "Jungle Clear Q"),
                     new ValueCheckbox(true, "jungleclear.w", "Jungle Clear W"),
                     new ValueCheckbox(true,  "jungleclear.e", "Jungle Clear E")

@@ -66,6 +66,7 @@
     <Compile Include="Model\Feature.cs" />
     <Compile Include="Model\Globals.cs" />
     <Compile Include="Model\Interfaces\IChampion.cs" />
+    <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Model\PluginModel.cs" />
     <Compile Include="Model\SpellDamage.cs" />
     <Compile Include="Model\Values\ValueAbstract.cs" />
@@ -81,7 +82,6 @@
     </Compile>
     <Compile Include="Util\DamageUtil.cs" />
     <Compile Include="Util\MathUtil.cs" />
-    <Compile Include="Model\NotificationModel.cs" />
     <Compile Include="Util\NotificationUtil.cs" />
     <Compile Include="Util\PredictionUtil.cs" />
     <Compile Include="Util\ItemUtil.cs" />
