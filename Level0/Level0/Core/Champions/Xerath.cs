@@ -44,7 +44,7 @@ namespace LevelZero.Core.Champions
                 new Spell.Chargeable(SpellSlot.Q, 750, 1550, 1500, 500, int.MaxValue, 100) { AllowedCollisionCount = int.MaxValue },
                 new Spell.Skillshot(SpellSlot.W, 1100, SkillShotType.Circular, 750, int.MaxValue, 100) { AllowedCollisionCount = int.MaxValue },
                 new Spell.Skillshot(SpellSlot.E, 1050, SkillShotType.Linear, 250, 1100, 60),
-                new Spell.Skillshot(SpellSlot.R, (uint) (2000 + (Player.GetSpell(SpellSlot.R).Level * 1200)), SkillShotType.Circular, 500, int.MaxValue, 120) { AllowedCollisionCount = int.MaxValue }
+                new Spell.Skillshot(SpellSlot.R, 3200, SkillShotType.Circular, 500, int.MaxValue, 120) { AllowedCollisionCount = int.MaxValue }
         };
             DamageUtil.SpellsDamage = new List<SpellDamage>
             {
@@ -237,7 +237,7 @@ namespace LevelZero.Core.Champions
                         Orbwalker.DisableAttacking = true;
                     }
 
-                    R.Cast();
+                    R.Cast(predictionR.CastPosition);
                      
                 }else if (castingR && predictionR.HitChancePercent >= 70)
                 {
@@ -499,7 +499,7 @@ namespace LevelZero.Core.Champions
                             Orbwalker.DisableAttacking = true;
                         }
 
-                        R.Cast();
+                        R.Cast(predictionR.CastPosition);
 
                     }
                     else if (castingR && predictionR.HitChancePercent >= 70)

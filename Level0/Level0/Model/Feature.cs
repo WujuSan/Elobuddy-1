@@ -70,12 +70,13 @@ namespace LevelZero.Model
                             ((ValueKeybind)valueAbstract).InitialValue;
                         var currentMenuFeatureAuxKeybind = FeatureMenu.Add(NameFeature + "." + valueAbstract.Identifier,
                             new KeyBind(valueAbstract.DisplayName, ((ValueKeybind)valueAbstract).InitialValue, ((ValueKeybind)valueAbstract).BindType));
-                        currentMenuFeatureAuxKeybind.OnValueChange += delegate (ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
-                        {
-                            MenuValueStyleList.Find(x => x.Identifier == valueAbstract.Identifier).CurrentValue
+                        currentMenuFeatureAuxKeybind.OnValueChange +=
+                            delegate(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
+                            {
+                                MenuValueStyleList.Find(x => x.Identifier == valueAbstract.Identifier).CurrentValue
                                 =
                                 currentMenuFeatureAuxKeybind.CurrentValue;
-                        };
+                            };
                         break;
                 }
             }

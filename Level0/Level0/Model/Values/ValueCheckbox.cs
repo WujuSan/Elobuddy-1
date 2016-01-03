@@ -11,7 +11,7 @@ namespace LevelZero.Model.Values
             Identifier = identifier;
             DisplayName = displayName;
             InitialValue = initialValue;
-            EnumMenuStyle = EnumMenuStyle.KeyBind;
+            EnumMenuStyle = EnumMenuStyle.Checkbox;
         }
     }
 }
