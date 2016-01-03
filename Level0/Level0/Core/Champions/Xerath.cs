@@ -515,12 +515,13 @@ namespace LevelZero.Core.Champions
                         R.Cast(predictionR.CastPosition);
                     }
                 }
-                else if (!R.IsReady())
-                {
-                    castingR = false;
-                    Orbwalker.DisableMovement = false;
-                    Orbwalker.DisableAttacking = false;
-                }
+            }
+
+            if (!Spells[3].IsReady())
+            {
+                castingR = false;
+                Orbwalker.DisableMovement = false;
+                Orbwalker.DisableAttacking = false;
             }
 
             base.OnUpdate(args);
