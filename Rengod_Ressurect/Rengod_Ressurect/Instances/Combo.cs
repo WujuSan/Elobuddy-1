@@ -35,6 +35,12 @@ namespace Rengod_Ressurect.Instances
 
             if (!target.IsValidTarget(Spells.E.Range)) return;
 
+            if(target.Distance(Player.Instance) < 350)
+            {
+                var predictPos = Prediction.Position.PredictUnitPosition(target, 200);
+                Orbwalker.OrbwalkTo(predictPos.To3D());
+            }
+
             if (Player.HasBuff(Globals.RENGAR_UTIMATE_DISPLAY_NAME) || Player.HasBuff(Globals.RENGAR_UTIMATE_NAME))
             {
                 if (Player.Instance.IsInAutoAttackRange(target))
